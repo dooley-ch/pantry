@@ -1,0 +1,29 @@
+{
+  "name": "dooley-ch/open_food_facts",
+  "description": "description",
+  "minimum-stability": "stable",
+  "license": "proprietary",
+  "type": "project",
+  "authors": [
+    {
+      "name": "James Dooley",
+      "email": "james@dooley.ch"
+    }
+  ],
+  "require": {
+    "nesbot/carbon": "^2.46",
+    "symfony/yaml": "^5.2",
+    "ext-mysqli": "*"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^9.5",
+    "phpspec/prophecy": "^1.13"
+  },
+  "autoload": {
+    "psr-4": {
+      "OpenFoodFacts\\": "app"
+    },
+    "files": [],
+    "classmap": []
+  }
+}

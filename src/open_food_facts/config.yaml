@@ -1,0 +1,22 @@
+# *******************************************************************************************
+# File: config.yaml
+#
+# Created: 26-11-2021
+#
+# Copyright (c) 2021 James Dooley <james@dooley.ch>
+#
+# History:
+# 26-11-2021: Initial version
+#
+# *******************************************************************************************
+
+data-file: /Volumes/LaCie/Dev/pantry/data/open_food_facts/products_2021_11_26.csv
+
+database:
+  host: localhost
+  port: 8889
+  database: pantry
+  user: pantry_user
+  password: w3lc0me*1
+
+batch-size: 10000

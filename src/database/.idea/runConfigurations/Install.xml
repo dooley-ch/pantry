@@ -1,0 +1,9 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Install" type="DatabaseScript" editBeforeRun="true">
+    <script-file value="$PROJECT_DIR$/uninstall.sql" />
+    <script-file value="$PROJECT_DIR$/install.sql" />
+    <script-mode>FILE</script-mode>
+    <data-source id="2646bf47-6818-4959-ab6e-06768799cbb6" />
+    <method v="2" />
+  </configuration>
+</component>
