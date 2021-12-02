@@ -17,8 +17,24 @@ The API calls must be authorized via a custom header:
 
 The following calls are used to access product data:
 
-API Call           | URL                                                         | Comment
------------------- | ----------------------------------------------------------- | ----------------------------------------------
-Product by ID      | https://www.foodrepo.org/api/v3/products/{id}               | You can get the product id via the barcode API
-Product by Barcode | https://www.foodrepo.org/api/v3/products?barcodes={barcode} | You can get the product id via the barcode API
+| API Call           | URL                                                         | Comment                                        |
+|--------------------|-------------------------------------------------------------|------------------------------------------------|
+| Product by ID      | https://www.foodrepo.org/api/v3/products/{id}               | You can get the product id via the barcode API |
+| Product by Barcode | https://www.foodrepo.org/api/v3/products?barcodes={barcode} | You can get the product id via the barcode API |
+
+# Data
+
+Both APIs return the same data structure and the following fields are useful for this article:
+
+| Name                      | Type       |                                         |
+|---------------------------|------------|-----------------------------------------|
+| id                        | string     | Product id                              |
+| country                   | string     | The country where the code is available |
+| barcode                   | string     | The product barcode                     |
+| name_translations         | collection |                                         |
+| display_name_translations | collection |                                         |
+| ingredients_translations  | collection |                                         |
+| quantity                  | string     |                                         |
+| unit                      | string     |                                         |
+| images                    | string     |                                         |
 

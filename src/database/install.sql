@@ -87,10 +87,33 @@ CREATE TABLE xxx_stock_summary(
 
 CREATE INDEX xxx_stock_summary_ix_record_id ON xxx_stock_summary(record_id);
 
-CREATE TABLE product_image(
+CREATE TABLE image(
   id INT NOT NULL AUTO_INCREMENT,
   url TEXT NOT NULL,
   image_type CHAR(1) NOT NULL,
+  product_image_id INT NOT NULL,
+  lock_version SMALLINT NOT NULL DEFAULT 1,
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY(id)
+);
+
+CREATE TABLE xxx_image(
+  id BIGINT NOT NULL AUTO_INCREMENT,
+  logged_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  action CHAR(1) NOT NULL,
+  record_id INT NOT NULL,
+  url TEXT,
+  image_type CHAR(1),
+  product_image_id INT,
+  lock_version SMALLINT NOT NULL,
+  PRIMARY KEY(id)
+);
+
+CREATE INDEX xxx_image_ix_record_id ON xxx_image(record_id);
+
+CREATE TABLE product_image(
+  id INT NOT NULL AUTO_INCREMENT,
   product_id INT NOT NULL,
   lock_version SMALLINT NOT NULL DEFAULT 1,
   created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -103,10 +126,7 @@ CREATE TABLE xxx_product_image(
   logged_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   action CHAR(1) NOT NULL,
   record_id INT NOT NULL,
-  url TEXT,
-  image_type CHAR(1),
-  product_id INT,
-  lock_version SMALLINT NOT NULL,
+  lock_version SMALLINT,
   PRIMARY KEY(id)
 );
 
@@ -120,6 +140,10 @@ ALTER TABLE stock_summary
   ADD CONSTRAINT product_stock_summary
     FOREIGN KEY (product_id) REFERENCES product (id) ON DELETE Cascade
       ON UPDATE Cascade;
+
+ALTER TABLE image
+  ADD CONSTRAINT product_image_image
+    FOREIGN KEY (product_image_id) REFERENCES product_image (id);
 
 ALTER TABLE product_image
   ADD CONSTRAINT product_product_image
