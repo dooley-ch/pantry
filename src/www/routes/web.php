@@ -16,3 +16,11 @@
 $router->get('/', function () use ($router) {
     return $router->app->version();
 });
+
+$router->get('/hello/world', function () use ($router) {
+    return 'Hello, World!';
+});
+
+$router->get('/hello/world/{name}', function ($name) use ($router) {
+    return "Hello, {$name}";
+});

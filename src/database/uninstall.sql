@@ -14,13 +14,11 @@ USE pantry;
 
 DROP TABLE IF EXISTS xxx_product;
 DROP TABLE IF EXISTS xxx_stock_summary;
+DROP TABLE IF EXISTS xxx_product_image;
 
 DROP TABLE IF EXISTS stock_transaction;
 DROP TABLE IF EXISTS stock_summary;
+DROP TABLE IF EXISTS product_image;
 DROP TABLE IF EXISTS product;
 
-DROP TABLE IF EXISTS barcode_lookup;
-
 DROP TABLE IF EXISTS version;
-
-DROP DATABASE IF EXISTS pantry;
