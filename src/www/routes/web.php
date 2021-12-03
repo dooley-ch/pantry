@@ -35,3 +35,11 @@ $router->group(['prefix' => '/product'], function () use ($router) {
     $router->get('remove/{barcode}', 'ProductController@remove');
     $router->get('delete/{barcode}', 'ProductController@delete');
 });
+
+$router->group(['prefix' => '/user'], function () use ($router) {
+    $router->get('/', 'UserController@homePage');
+});
+
+$router->group(['prefix' => '/reports'], function () use ($router) {
+    $router->get('/', 'ReportsController@homePage');
+});

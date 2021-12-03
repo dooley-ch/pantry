@@ -1,6 +1,6 @@
 <?php
 // *******************************************************************************************
-//  File:  HomeController.php
+//  File:  ReportsController.php
 //
 //  Created: 03-12-2021
 //
@@ -18,25 +18,11 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
-class HomeController extends \Laravel\Lumen\Routing\Controller
+class ReportsController extends Controller
 {
     public function homePage(Request $request): Response
     {
-        return new Response("Home Page", 200);
+        return new Response("Reports Home Page", 200);
     }
 
-    public function usagePage(Request $request): Response
-    {
-        return new Response("Usage Page", 200);
-    }
-
-    public function aboutPage(Request $request): Response
-    {
-        return new Response("About Page", 200);
-    }
-
-    public function setupPage(Request $request): Response
-    {
-        return new Response("Setup Page", 200);
-    }
 }
