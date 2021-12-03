@@ -13,14 +13,25 @@
 |
 */
 
-$router->get('/', function () use ($router) {
-    return $router->app->version();
+$router->get('/', 'HomeController@homePage');
+$router->get('/usage', 'HomeController@usagePage');
+$router->get('/about', 'HomeController@aboutPage');
+
+$router->group(['prefix' => '/lookup/product'], function () use ($router) {
+    $router->get('code/{code}', 'ProductLookupController@getProductByCode');
+    $router->get('barcode/{barcode}', 'ProductLookupController@getProductByBarcode');
 });
 
-$router->get('/hello/world', function () use ($router) {
-    return 'Hello, World!';
+$router->group(['prefix' => '/api'], function () use ($router) {
+    $router->get('product/detail/{barcode}', 'ApiController@getProductDetails');
+    $router->get('product/add/{barcode}', 'ApiController@addProduct');
+    $router->get('product/remove/{barcode}', 'ApiController@removeProduct');
 });
 
-$router->get('/hello/world/{name}', function ($name) use ($router) {
-    return "Hello, {$name}";
+$router->group(['prefix' => '/product'], function () use ($router) {
+    $router->get('/', 'ProductController@homePage');
+    $router->get('detail/{barcode}', 'ProductController@details');
+    $router->get('add/{barcode}', 'ProductController@add');
+    $router->get('remove/{barcode}', 'ProductController@remove');
+    $router->get('delete/{barcode}', 'ProductController@delete');
 });
