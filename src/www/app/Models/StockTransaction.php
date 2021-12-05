@@ -69,10 +69,10 @@ class StockTransaction extends Record
         return new StockTransaction($id, $lock_version, $created_at, $updated_at, $operation, $amount, $stock_summary_id);
     }
 
-    public static function asNew(): StockTransaction
+    public static function asNew(string $operation, int $amount, int $stock_summary_id): StockTransaction
     {
         $current_date = new Carbon();
 
-        return new StockTransaction(-1, 1, $current_date, $current_date, '', 0, -1);
+        return new StockTransaction(-1, 1, $current_date, $current_date, $operation, $amount, $stock_summary_id);
     }
 }

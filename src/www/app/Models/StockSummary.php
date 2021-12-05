@@ -58,10 +58,10 @@ class StockSummary extends Record
         return new StockSummary($id, $lock_version, $created_at, $updated_at, $amount, $product_id);
     }
 
-    public static function asNew(): StockSummary
+    public static function asNew(int $amount,  int $product_id): StockSummary
     {
         $current_date = new Carbon();
 
-        return new StockSummary(-1, 1, $current_date, $current_date, 0, -1);
+        return new StockSummary(-1, 1, $current_date, $current_date, $amount, $product_id);
     }
 }

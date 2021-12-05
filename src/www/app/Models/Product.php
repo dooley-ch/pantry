@@ -69,10 +69,10 @@ class Product extends Record
         return new Product($id, $lock_version, $created_at, $updated_at, $barcode, $name, $description);
     }
 
-    public static function asNew(): Product
+    public static function asNew(string $barcode, string $name, string $description): Product
     {
         $current_date = new Carbon();
 
-        return new Product(-1, 1, $current_date, $current_date, '', '', '');
+        return new Product(-1, 1, $current_date, $current_date, $barcode, $name, $description);
     }
 }

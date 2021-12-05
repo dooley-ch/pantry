@@ -25,6 +25,7 @@ use App\Models\XxxImage;
 use App\Models\XxxProduct;
 use App\Models\XxxProductImage;
 use App\Models\XxxStockSummary;
+use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\DB;
 
 class Datastore
@@ -53,6 +54,28 @@ class Datastore
         }
 
         return $list;
+    }
+
+    public function insertImage(Image $image): ?Image
+    {
+        DB::beginTransaction();
+
+        try {
+            $id = DB::table('image')->insertGetId(['url' => $image->getUrl(), 'image_type' => $image->getImageType(),
+                'product_image_id' => $image->getProductImageId()]);
+
+            DB::statement("INSERT INTO xxx_image (action, record_id, url, image_type, product_image_id, lock_version)
+                    SELECT 'I', id, url, image_type, product_image_id, lock_version FROM image WHERE (id = ?);", [$id]);
+
+            DB::commit();
+
+            return $this->getImage($id);
+        } catch (QueryException $e) {
+            DB::rollBack();
+            // TODO - Log Error
+        }
+
+        return null;
     }
 
     public function getImageAudit(int $record_id): array
@@ -89,6 +112,28 @@ class Datastore
 
         if (count($records) > 0) {
             return Product::fromRecord($records[0]);
+        }
+
+        return null;
+    }
+
+    public function insertProduct(Product $product): ?Product
+    {
+        DB::beginTransaction();
+
+        try {
+            $id = DB::table('product')->insertGetId(['barcode' => $product->getBarcode(),
+                'name' => $product->getName(), 'description' => $product->getDescription()]);
+
+            DB::statement("INSERT INTO xxx_product (action, record_id, barcode, name, description, lock_version)
+                    SELECT 'I', id, barcode, name, description, lock_version FROM product WHERE (id = ?);", [$id]);
+
+            DB::commit();
+
+            return $this->getProduct($id);
+        } catch (QueryException $e) {
+            DB::rollBack();
+            // TODO - Log Error
         }
 
         return null;
@@ -133,6 +178,27 @@ class Datastore
         }
 
         return $list;
+    }
+
+    public function insertProductImage(ProductImage $record): ?ProductImage
+    {
+        DB::beginTransaction();
+
+        try {
+            $id = DB::table('product_image')->insertGetId(['product_id' => $record->getProductId()]);
+
+            DB::statement("INSERT INTO xxx_product_image (action, record_id, product_id, lock_version)
+                                    SELECT 'I', id, product_id, lock_version FROM product_image WHERE (id = ?);", [$id]);
+
+            DB::commit();
+
+            return $this->getProductImage($id);
+        } catch (QueryException $e) {
+            DB::rollBack();
+            // TODO - Log Error
+        }
+
+        return null;
     }
 
     public function getProductImageAudit(int $record_id): array
@@ -187,6 +253,28 @@ class Datastore
         return $list;
     }
 
+    public function insertStockSummary(StockSummary $record): ?StockSummary
+    {
+        DB::beginTransaction();
+
+        try {
+            $id = DB::table('stock_summary')->insertGetId(
+                ['amount' => $record->getAmount(), 'product_id' => $record->getProductId()]);
+
+            DB::statement("INSERT INTO xxx_stock_summary (action, record_id, amount, product_id, lock_version)
+                                    SELECT 'I', id, amount, product_id, lock_version FROM stock_summary WHERE (id = ?);", [$id]);
+
+            DB::commit();
+
+            return $this->getStockSummary($id);
+        } catch (QueryException $e) {
+            DB::rollBack();
+            // TODO - Log Error
+        }
+
+        return null;
+    }
+
     //endregion
 
     //region Stock Transaction
@@ -213,6 +301,22 @@ class Datastore
         }
 
         return $list;
+    }
+
+    public function insertStockTransaction(StockTransaction $record): ?StockTransaction
+    {
+        try {
+            $id = DB::table('stock_transaction')->insertGetId(
+                ['operation' => $record->getOperation(), 'amount' => $record->getAmount(),
+                    'stock_summary_id' => $record->getStockSummaryId()]);
+
+            return $this->getStockTransaction($id);
+        } catch (QueryException $e) {
+            DB::rollBack();
+            // TODO - Log Error
+        }
+
+        return null;
     }
 
     //endregion

@@ -69,10 +69,10 @@ class Image extends Record
         return new Image($id, $lock_version, $created_at, $updated_at, $url, $image_type, $product_image_id);
     }
 
-    public static function asNew(): Image
+    public static function asNew(string $url, string $image_type, int $product_image_id): Image
     {
         $current_date = new Carbon();
 
-        return new Image(-1, 1, $current_date, $current_date, '', '', -1);
+        return new Image(-1, 1, $current_date, $current_date, $url, $image_type, $product_image_id);
     }
 }

@@ -70,7 +70,7 @@ INSERT INTO product_image (id, product_id) VALUES (8, 4);
 
 INSERT INTO product_image (id, product_id) VALUES (9, 5);
 
-INSERT INTO xxx_product_image (action, record_id, lock_version) SELECT 'I', id, lock_version FROM product_image;
+INSERT INTO xxx_product_image (action, record_id, product_id, lock_version) SELECT 'I', id, product_id, lock_version FROM product_image;
 
 INSERT INTO image (id, url, image_type, product_image_id) VALUES (1, 'https://bulma.io/images/placeholders/24x124.png', 'T', 1);
 INSERT INTO image (id, url, image_type, product_image_id) VALUES (2, 'https://bulma.io/images/placeholders/48x48.png', 'M', 1);
