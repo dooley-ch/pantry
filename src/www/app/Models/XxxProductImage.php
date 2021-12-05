@@ -15,6 +15,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use \stdClass;
 use Carbon\Carbon;
 
 class XxxProductImage extends AuditRecord
@@ -28,5 +29,17 @@ class XxxProductImage extends AuditRecord
     public function getProductId(): int
     {
         return $this->product_id;
+    }
+
+    public static function fromRecord(stdClass $record): XxxProductImage
+    {
+        $id = intval($record->id);
+        $logged_at = Carbon::createFromTimestamp($record->logged_at);
+        $action = $record->action;
+        $record_id = intval($record->record_id);
+        $product_id = intval($record->product_id);
+        $lock_version = intval($record->lock_version);
+
+        return new XxxProductImage($id, $logged_at, $action, $record_id, $product_id, $lock_version);
     }
 }

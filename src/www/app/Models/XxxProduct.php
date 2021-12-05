@@ -15,6 +15,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use \stdClass;
 use Carbon\Carbon;
 
 class XxxProduct extends AuditRecord
@@ -38,5 +39,19 @@ class XxxProduct extends AuditRecord
     public function getDescription(): string
     {
         return $this->description;
+    }
+
+    public static function fromRecord(stdClass $record): XxxProduct
+    {
+        $id = intval($record->id);
+        $logged_at = Carbon::createFromTimestamp($record->logged_at);
+        $action = $record->action;
+        $record_id = intval($record->record_id);
+        $barcode = $record->barcode;
+        $name = $record->name;
+        $description = $record->description;
+        $lock_version = intval($record->lock_version);
+
+        return new XxxProduct($id, $logged_at, $action, $record_id, $lock_version, $barcode, $name, $description);
     }
 }

@@ -68,7 +68,6 @@ CREATE TABLE xxx_product(
   barcode VARCHAR(60),
   name VARCHAR(300),
   description TEXT,
-  image_url VARCHAR(3000),
   lock_version SMALLINT,
   PRIMARY KEY(id)
 );
@@ -81,6 +80,7 @@ CREATE TABLE xxx_stock_summary(
   action CHAR(1) NOT NULL,
   record_id INT NOT NULL,
   amount INT,
+  product_id INT,
   lock_version SMALLINT,
   PRIMARY KEY(id)
 );
@@ -126,6 +126,7 @@ CREATE TABLE xxx_product_image(
   logged_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   action CHAR(1) NOT NULL,
   record_id INT NOT NULL,
+  product_id INT,
   lock_version SMALLINT,
   PRIMARY KEY(id)
 );
@@ -148,3 +149,5 @@ ALTER TABLE image
 ALTER TABLE product_image
   ADD CONSTRAINT product_product_image
     FOREIGN KEY (product_id) REFERENCES product (id);
+
+INSERT INTO version (major, minor, build, comment) VALUES (1, 0, 1, 'Initial version');

@@ -15,6 +15,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use stdClass;
 use Carbon\Carbon;
 
 class Product extends Record
@@ -53,5 +54,25 @@ class Product extends Record
    public function setDescription(string $description): void
     {
         $this->description = $description;
+    }
+
+    public static function fromRecord(stdClass $record): Product
+    {
+        $id = intval($record->id);
+        $barcode = $record->barcode;
+        $name = $record->name;
+        $description = $record->description;
+        $lock_version = intval($record->lock_version);
+        $created_at = Carbon::createFromTimestamp($record->created_at);
+        $updated_at = Carbon::createFromTimestamp($record->updated_at);
+
+        return new Product($id, $lock_version, $created_at, $updated_at, $barcode, $name, $description);
+    }
+
+    public static function asNew(): Product
+    {
+        $current_date = new Carbon();
+
+        return new Product(-1, 1, $current_date, $current_date, '', '', '');
     }
 }

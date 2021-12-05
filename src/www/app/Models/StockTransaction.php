@@ -15,6 +15,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use \stdClass;
 use Carbon\Carbon;
 
 class StockTransaction extends Record
@@ -53,5 +54,25 @@ class StockTransaction extends Record
     public function setStockSummaryId(int $stock_summary_id): void
     {
         $this->stock_summary_id = $stock_summary_id;
+    }
+
+    public static function fromRecord(stdClass $record): StockTransaction
+    {
+        $id = intval($record->id);
+        $operation = $record->operation;
+        $amount = intval($record->amount);
+        $stock_summary_id = intval($record->stock_summary_id);
+        $lock_version = intval($record->lock_version);
+        $created_at = Carbon::createFromTimestamp($record->created_at);
+        $updated_at = Carbon::createFromTimestamp($record->updated_at);
+
+        return new StockTransaction($id, $lock_version, $created_at, $updated_at, $operation, $amount, $stock_summary_id);
+    }
+
+    public static function asNew(): StockTransaction
+    {
+        $current_date = new Carbon();
+
+        return new StockTransaction(-1, 1, $current_date, $current_date, '', 0, -1);
     }
 }

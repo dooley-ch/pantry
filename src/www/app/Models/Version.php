@@ -15,6 +15,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use \stdClass;
 use Carbon\Carbon;
 
 class Version
@@ -51,5 +52,17 @@ class Version
     public function getCreatedAt(): Carbon
     {
         return $this->created_at;
+    }
+
+    public static function fromRecord(stdClass $record): Version
+    {
+        $id = intval($record->id);
+        $major = intval($record->major);
+        $minor = intval($record->minor);
+        $build = intval($record->build);
+        $comment = $record->comment;
+        $created_at = Carbon::createFromTimestamp($record->created_at);
+
+        return new Version($id, $major, $minor, $build, $comment, $created_at);
     }
 }

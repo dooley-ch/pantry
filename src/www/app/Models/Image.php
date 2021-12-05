@@ -15,6 +15,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use stdClass;
 use Carbon\Carbon;
 
 class Image extends Record
@@ -53,5 +54,25 @@ class Image extends Record
     public function setProductImageId(int $product_image_id): void
     {
         $this->product_image_id = $product_image_id;
+    }
+
+    public static function fromRecord(stdClass $record): Image
+    {
+        $id = intval($record->id);
+        $url = $record->url;
+        $image_type = $record->image_type;
+        $product_image_id = $record->product_image_id;
+        $lock_version = intval($record->lock_version);
+        $created_at = Carbon::createFromTimestamp($record->created_at);
+        $updated_at = Carbon::createFromTimestamp($record->updated_at);
+
+        return new Image($id, $lock_version, $created_at, $updated_at, $url, $image_type, $product_image_id);
+    }
+
+    public static function asNew(): Image
+    {
+        $current_date = new Carbon();
+
+        return new Image(-1, 1, $current_date, $current_date, '', '', -1);
     }
 }
