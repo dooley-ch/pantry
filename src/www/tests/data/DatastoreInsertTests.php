@@ -112,5 +112,4 @@ class DatastoreInsertTests extends TestCase
         $image = $store->insertImage($image);
         $this->assertGreaterThan(36, $image->getId());
     }
-
 }

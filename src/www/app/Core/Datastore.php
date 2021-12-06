@@ -107,6 +107,33 @@ class Datastore
         return null;
     }
 
+    public function deleteImage(Image $image): bool
+    {
+        DB::beginTransaction();
+
+        try {
+            DB::statement("INSERT INTO xxx_image (action, record_id, url, image_type, product_image_id, lock_version)
+                                    SELECT 'D', id, url, image_type, product_image_id, lock_version FROM image
+                                    WHERE (id = ?);", [$image->getId()]);
+
+            $affected = DB::table('image')->where('id', $image->getId())->where('lock_version',
+                $image->getLockVersion())->delete();
+
+            if ($affected == 0) {
+                // TODO - Log failure to update row
+                return false;
+            }
+
+            DB::commit();
+        } catch (QueryException $e) {
+            DB::rollBack();
+            // TODO - Log Error
+            return false;
+        }
+
+        return true;
+    }
+
     public function getImageAudit(int $record_id): array
     {
         $list = [];
@@ -195,6 +222,33 @@ class Datastore
         }
 
         return null;
+    }
+
+    public function deleteProduct(Product $product): bool
+    {
+        DB::beginTransaction();
+
+        try {
+            DB::statement("INSERT INTO xxx_product (action, record_id, barcode, name, description, lock_version)
+                    SELECT 'D', id, barcode, name, description, lock_version FROM product WHERE (id = ?);", [$product->getId()]);
+
+            $affected = DB::table('product')->where('id', $product->getId())->where('lock_version',
+                $product->getLockVersion())->delete();
+
+            if ($affected == 0) {
+                // TODO - Log failure to update row
+                return false;
+            }
+
+
+            DB::commit();
+        } catch (QueryException $e) {
+            DB::rollBack();
+            // TODO - Log Error
+            return false;
+        }
+
+        return true;
     }
 
     public function getProductAudit(int $record_id): array
@@ -288,6 +342,33 @@ class Datastore
         return null;
     }
 
+    public function deleteProductImage(ProductImage $product_image): bool
+    {
+        DB::beginTransaction();
+
+        try {
+            DB::statement("INSERT INTO xxx_product_image (action, record_id, product_id, lock_version)
+                                    SELECT 'D', id, product_id, lock_version FROM product_image
+                                    WHERE (id = ?);", [$product_image->getId()]);
+
+            $affected = DB::table('product_image')->where('id', $product_image->getId())->where('lock_version',
+                $product_image->getLockVersion())->delete();
+
+            if ($affected == 0) {
+                // TODO - Log failure to update row
+                return false;
+            }
+
+            DB::commit();
+        } catch (QueryException $e) {
+            DB::rollBack();
+            // TODO - Log Error
+            return false;
+        }
+
+        return true;
+    }
+
     public function getProductImageAudit(int $record_id): array
     {
         $list = [];
@@ -378,6 +459,33 @@ class Datastore
         return null;
     }
 
+    public function deleteStockSummary(StockSummary $summary): bool
+    {
+        DB::beginTransaction();
+
+        try {
+            DB::statement("INSERT INTO xxx_stock_summary (action, record_id, amount, product_id, lock_version)
+                                    SELECT 'D', id, amount, product_id, lock_version FROM stock_summary
+                                    WHERE (id = ?);", [$summary->getId()]);
+
+            $affected = DB::table('stock_summary')->where('id', $summary->getId())->where('lock_version',
+                $summary->getLockVersion())->delete();
+
+            if ($affected == 0) {
+                // TODO - Log failure to update row
+                return false;
+            }
+
+            DB::commit();
+        } catch (QueryException $e) {
+            DB::rollBack();
+            // TODO - Log Error
+            return false;
+        }
+
+        return true;
+    }
+
     public function getStockSummaryAudit(int $record_id): array
     {
         $list = [];
@@ -448,15 +556,30 @@ class Datastore
                 return null;
             }
 
-            DB::commit();
-
             return $this->getStockTransaction($transaction->getId());
+        } catch (QueryException $e) {
+            // TODO - Log Error
+        }
+
+        return null;
+    }
+
+    public function deleteStockTransaction(StockTransaction $transaction): bool
+    {
+        try {
+            $affected = DB::table('stock_transaction')->where('id', $transaction->getId())->where('lock_version',
+                $transaction->getLockVersion())->delete();
+
+            if ($affected == 1) {
+                // TODO - Log failure to update row
+                return true;
+            }
         } catch (QueryException $e) {
             DB::rollBack();
             // TODO - Log Error
         }
 
-        return null;
+        return false;
     }
 
     //endregion
