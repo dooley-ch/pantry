@@ -25,6 +25,8 @@ use TestCase;
 
 class DatastoreInsertTests extends TestCase
 {
+    //region Product
+
     /**
      * @test
      */
@@ -38,6 +40,21 @@ class DatastoreInsertTests extends TestCase
         $this->assertNotNull($record);
         $this->assertGreaterThan(5, $record->getId());
     }
+
+    /**
+     * @test
+     */
+    public function insert_product_invalid()
+    {
+        $store = new Datastore();
+        $record = Product::asNew('01234567895', 'Product 90', 'Product 90 Notes');
+
+        $record = $store->insertProduct($record);
+
+        $this->assertNull($record);
+    }
+
+    //endregion
 
     /**
      * @test

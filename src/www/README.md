@@ -1,3 +1,10 @@
+# Configuration
+
+| Area              | Location                                           | Comment                                      |
+|-------------------|----------------------------------------------------|----------------------------------------------|
+| Log File Names    | /vendor/laravel/lumen-framework/config/logging.php | Search for the mane lumen.log and replace it |
+
+
 # Lumen PHP Framework
 
 [![Build Status](https://travis-ci.org/laravel/lumen-framework.svg)](https://travis-ci.org/laravel/lumen-framework)

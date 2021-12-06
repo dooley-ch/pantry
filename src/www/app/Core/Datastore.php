@@ -25,8 +25,10 @@ use App\Models\XxxImage;
 use App\Models\XxxProduct;
 use App\Models\XxxProductImage;
 use App\Models\XxxStockSummary;
+
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class Datastore
 {
@@ -72,7 +74,7 @@ class Datastore
             return $this->getImage($id);
         } catch (QueryException $e) {
             DB::rollBack();
-            // TODO - Log Error
+            Log::error('Failed to insert Image (' . $image->getUrl() . '): ' . $e->getMessage());
         }
 
         return null;
@@ -88,7 +90,7 @@ class Datastore
                 'product_image_id' => $image->getProductImageId(), 'lock_version' => ($image->getLockVersion() + 1)]);
 
             if ($affected == 0) {
-                // TODO - Log failure to update row
+                Log::warning('Failed to update image (' . $image->getId() . ') - No errors');
                 return null;
             }
 
@@ -101,7 +103,7 @@ class Datastore
             return $this->getImage($image->getId());
         } catch (QueryException $e) {
             DB::rollBack();
-            // TODO - Log Error
+            Log::error('Failed to update Image (' . $image->getId() . '): ' . $e->getMessage());
         }
 
         return null;
@@ -120,14 +122,15 @@ class Datastore
                 $image->getLockVersion())->delete();
 
             if ($affected == 0) {
-                // TODO - Log failure to update row
+                Log::warning('Failed to delete image (' . $image->getId() . ') - No errors');
                 return false;
             }
 
             DB::commit();
         } catch (QueryException $e) {
             DB::rollBack();
-            // TODO - Log Error
+            Log::error('Failed to delete Image (' . $image->getId() . '): ' . $e->getMessage());
+
             return false;
         }
 
@@ -189,7 +192,7 @@ class Datastore
             return $this->getProduct($id);
         } catch (QueryException $e) {
             DB::rollBack();
-            // TODO - Log Error
+            Log::error('Failed to insert Product (' . $product->getName() . '): ' . $e->getMessage());
         }
 
         return null;
@@ -206,7 +209,7 @@ class Datastore
                 'lock_version' => ($product->getLockVersion() + 1)]);
 
             if ($affected == 0) {
-                // TODO - Log failure to update row
+                Log::warning('Failed to insert Product (' . $product->getName() . '): No Errors');
                 return null;
             }
 
@@ -218,7 +221,7 @@ class Datastore
             return $this->getProduct($product->getId());
         } catch (QueryException $e) {
             DB::rollBack();
-            // TODO - Log Error
+            Log::error('Failed to update Product (' . $product->getName() . '): ' . $e->getMessage());
         }
 
         return null;
@@ -236,7 +239,7 @@ class Datastore
                 $product->getLockVersion())->delete();
 
             if ($affected == 0) {
-                // TODO - Log failure to update row
+                Log::warning('Failed to delete Product (' . $product->getName() . '): No Errors');
                 return false;
             }
 
@@ -244,7 +247,7 @@ class Datastore
             DB::commit();
         } catch (QueryException $e) {
             DB::rollBack();
-            // TODO - Log Error
+            Log::error('Failed to delete Product (' . $product->getName() . '): ' . $e->getMessage());
             return false;
         }
 
@@ -292,12 +295,12 @@ class Datastore
         return $list;
     }
 
-    public function insertProductImage(ProductImage $record): ?ProductImage
+    public function insertProductImage(ProductImage $product_image): ?ProductImage
     {
         DB::beginTransaction();
 
         try {
-            $id = DB::table('product_image')->insertGetId(['product_id' => $record->getProductId()]);
+            $id = DB::table('product_image')->insertGetId(['product_id' => $product_image->getProductId()]);
 
             DB::statement("INSERT INTO xxx_product_image (action, record_id, product_id, lock_version)
                                     SELECT 'I', id, product_id, lock_version FROM product_image WHERE (id = ?);", [$id]);
@@ -307,7 +310,7 @@ class Datastore
             return $this->getProductImage($id);
         } catch (QueryException $e) {
             DB::rollBack();
-            // TODO - Log Error
+            Log::error('Failed to insert Product Image (' . $product_image->getId() . '): ' . $e->getMessage());
         }
 
         return null;
@@ -323,7 +326,7 @@ class Datastore
                 'lock_version' => ($product_image->getLockVersion() + 1)]);
 
             if ($affected == 0) {
-                // TODO - Log failure to update row
+                Log::warning('Failed to update Product Image (' . $product_image->getId() . '): No Errors');
                 return null;
             }
 
@@ -336,7 +339,7 @@ class Datastore
             return $this->getProductImage($product_image->getId());
         } catch (QueryException $e) {
             DB::rollBack();
-            // TODO - Log Error
+            Log::error('Failed to update Product Image (' . $product_image->getId() . '): ' . $e->getMessage());
         }
 
         return null;
@@ -355,14 +358,14 @@ class Datastore
                 $product_image->getLockVersion())->delete();
 
             if ($affected == 0) {
-                // TODO - Log failure to update row
+                Log::warning('Failed to delete Product Image (' . $product_image->getId() . '): No Errors');
                 return false;
             }
 
             DB::commit();
         } catch (QueryException $e) {
             DB::rollBack();
-            // TODO - Log Error
+            Log::error('Failed to delete Product Image (' . $product_image->getId() . '): ' . $e->getMessage());
             return false;
         }
 
@@ -408,13 +411,13 @@ class Datastore
         return null;
     }
 
-    public function insertStockSummary(StockSummary $record): ?StockSummary
+    public function insertStockSummary(StockSummary $summary): ?StockSummary
     {
         DB::beginTransaction();
 
         try {
             $id = DB::table('stock_summary')->insertGetId(
-                ['amount' => $record->getAmount(), 'product_id' => $record->getProductId()]);
+                ['amount' => $summary->getAmount(), 'product_id' => $summary->getProductId()]);
 
             DB::statement("INSERT INTO xxx_stock_summary (action, record_id, amount, product_id, lock_version)
                                     SELECT 'I', id, amount, product_id, lock_version FROM stock_summary WHERE (id = ?);", [$id]);
@@ -424,7 +427,7 @@ class Datastore
             return $this->getStockSummary($id);
         } catch (QueryException $e) {
             DB::rollBack();
-            // TODO - Log Error
+            Log::error('Failed to insert Stock Summary (' . $summary->getId() . '): ' . $e->getMessage());
         }
 
         return null;
@@ -440,7 +443,7 @@ class Datastore
                 'lock_version' => ($summary->getLockVersion() + 1)]);
 
             if ($affected == 0) {
-                // TODO - Log failure to update row
+                Log::warning('Failed to update Stock Summary (' . $summary->getId() . '): No Errors');
                 return null;
             }
 
@@ -453,7 +456,7 @@ class Datastore
             return $this->getStockSummary($summary->getId());
         } catch (QueryException $e) {
             DB::rollBack();
-            // TODO - Log Error
+            Log::error('Failed to update Stock Summary (' . $summary->getId() . '): ' . $e->getMessage());
         }
 
         return null;
@@ -472,14 +475,14 @@ class Datastore
                 $summary->getLockVersion())->delete();
 
             if ($affected == 0) {
-                // TODO - Log failure to update row
+                Log::warning('Failed to delete Stock Summary (' . $summary->getId() . '): No Errors');
                 return false;
             }
 
             DB::commit();
         } catch (QueryException $e) {
             DB::rollBack();
-            // TODO - Log Error
+            Log::error('Failed to delete Stock Summary (' . $summary->getId() . '): ' . $e->getMessage());
             return false;
         }
 
@@ -527,17 +530,17 @@ class Datastore
         return $list;
     }
 
-    public function insertStockTransaction(StockTransaction $record): ?StockTransaction
+    public function insertStockTransaction(StockTransaction $transaction): ?StockTransaction
     {
         try {
             $id = DB::table('stock_transaction')->insertGetId(
-                ['operation' => $record->getOperation(), 'amount' => $record->getAmount(),
-                    'stock_summary_id' => $record->getStockSummaryId()]);
+                ['operation' => $transaction->getOperation(), 'amount' => $transaction->getAmount(),
+                    'stock_summary_id' => $transaction->getStockSummaryId()]);
 
             return $this->getStockTransaction($id);
         } catch (QueryException $e) {
             DB::rollBack();
-            // TODO - Log Error
+            Log::error('Failed to insert Stock Transaction (' . $transaction->getId() . '): ' . $e->getMessage());
         }
 
         return null;
@@ -552,13 +555,13 @@ class Datastore
                 'lock_version' => ($transaction->getLockVersion() + 1)]);
 
             if ($affected == 0) {
-                // TODO - Log failure to update row
+                Log::warning('Failed to update Stock Transaction (' . $transaction->getId() . '): No Errors');
                 return null;
             }
 
             return $this->getStockTransaction($transaction->getId());
         } catch (QueryException $e) {
-            // TODO - Log Error
+            Log::error('Failed to update Stock Transaction (' . $transaction->getId() . '): ' . $e->getMessage());
         }
 
         return null;
@@ -571,12 +574,12 @@ class Datastore
                 $transaction->getLockVersion())->delete();
 
             if ($affected == 1) {
-                // TODO - Log failure to update row
+                Log::warning('Failed to delete Stock Transaction (' . $transaction->getId() . '): No Errors');
                 return true;
             }
         } catch (QueryException $e) {
             DB::rollBack();
-            // TODO - Log Error
+            Log::error('Failed to delete Stock Transaction (' . $transaction->getId() . '): ' . $e->getMessage());
         }
 
         return false;
