@@ -78,6 +78,35 @@ class Datastore
         return null;
     }
 
+    public function updateImage(Image $image): ?Image
+    {
+        DB::beginTransaction();
+
+        try {
+            $affected = DB::table('image')->where('id', $image->getId())->where('lock_version',
+                $image->getLockVersion())->update(['url' => $image->getUrl(), 'image_type' => $image->getImageType(),
+                'product_image_id' => $image->getProductImageId(), 'lock_version' => ($image->getLockVersion() + 1)]);
+
+            if ($affected == 0) {
+                // TODO - Log failure to update row
+                return null;
+            }
+
+            DB::statement("INSERT INTO xxx_image (action, record_id, url, image_type, product_image_id, lock_version)
+                                    SELECT 'U', id, url, image_type, product_image_id, lock_version FROM image
+                                    WHERE (id = ?);", [$image->getId()]);
+
+            DB::commit();
+
+            return $this->getImage($image->getId());
+        } catch (QueryException $e) {
+            DB::rollBack();
+            // TODO - Log Error
+        }
+
+        return null;
+    }
+
     public function getImageAudit(int $record_id): array
     {
         $list = [];
@@ -131,6 +160,35 @@ class Datastore
             DB::commit();
 
             return $this->getProduct($id);
+        } catch (QueryException $e) {
+            DB::rollBack();
+            // TODO - Log Error
+        }
+
+        return null;
+    }
+
+    public function updateProduct(Product $product): ?Product
+    {
+        DB::beginTransaction();
+
+        try {
+            $affected = DB::table('product')->where('id', $product->getId())->where('lock_version',
+                $product->getLockVersion())->update([
+                'barcode' => $product->getBarcode(), 'name' => $product->getName(), 'description' => $product->getDescription(),
+                'lock_version' => ($product->getLockVersion() + 1)]);
+
+            if ($affected == 0) {
+                // TODO - Log failure to update row
+                return null;
+            }
+
+            DB::statement("INSERT INTO xxx_product (action, record_id, barcode, name, description, lock_version)
+                    SELECT 'U', id, barcode, name, description, lock_version FROM product WHERE (id = ?);", [$product->getId()]);
+
+            DB::commit();
+
+            return $this->getProduct($product->getId());
         } catch (QueryException $e) {
             DB::rollBack();
             // TODO - Log Error
@@ -201,6 +259,35 @@ class Datastore
         return null;
     }
 
+    public function updateProductImage(ProductImage $product_image): ?ProductImage
+    {
+        DB::beginTransaction();
+
+        try {
+            $affected = DB::table('product_image')->where('id', $product_image->getId())->where('lock_version',
+                $product_image->getLockVersion())->update(['product_id' => $product_image->getProductId(),
+                'lock_version' => ($product_image->getLockVersion() + 1)]);
+
+            if ($affected == 0) {
+                // TODO - Log failure to update row
+                return null;
+            }
+
+            DB::statement("INSERT INTO xxx_product_image (action, record_id, product_id, lock_version)
+                                    SELECT 'U', id, product_id, lock_version FROM product_image
+                                    WHERE (id = ?);", [$product_image->getId()]);
+
+            DB::commit();
+
+            return $this->getProductImage($product_image->getId());
+        } catch (QueryException $e) {
+            DB::rollBack();
+            // TODO - Log Error
+        }
+
+        return null;
+    }
+
     public function getProductImageAudit(int $record_id): array
     {
         $list = [];
@@ -240,19 +327,6 @@ class Datastore
         return null;
     }
 
-    public function getStockSummaryAudit(int $record_id): array
-    {
-        $list = [];
-
-        $records = DB::table('xxx_stock_summary')->where('record_id', $record_id)->get();
-
-        foreach ($records as $record) {
-            $list []= XxxStockSummary::fromRecord($record);
-        }
-
-        return $list;
-    }
-
     public function insertStockSummary(StockSummary $record): ?StockSummary
     {
         DB::beginTransaction();
@@ -273,6 +347,48 @@ class Datastore
         }
 
         return null;
+    }
+
+    public function updateStockSummary(StockSummary $summary): ?StockSummary
+    {
+        DB::beginTransaction();
+
+        try {
+            $affected = DB::table('stock_summary')->where('id', $summary->getId())->where('lock_version',
+                $summary->getLockVersion())->update(['amount' => $summary->getAmount(), 'product_id' => $summary->getProductId(),
+                'lock_version' => ($summary->getLockVersion() + 1)]);
+
+            if ($affected == 0) {
+                // TODO - Log failure to update row
+                return null;
+            }
+
+            DB::statement("INSERT INTO xxx_stock_summary (action, record_id, amount, product_id, lock_version)
+                                    SELECT 'U', id, amount, product_id, lock_version FROM stock_summary
+                                    WHERE (id = ?);", [$summary->getId()]);
+
+            DB::commit();
+
+            return $this->getStockSummary($summary->getId());
+        } catch (QueryException $e) {
+            DB::rollBack();
+            // TODO - Log Error
+        }
+
+        return null;
+    }
+
+    public function getStockSummaryAudit(int $record_id): array
+    {
+        $list = [];
+
+        $records = DB::table('xxx_stock_summary')->where('record_id', $record_id)->get();
+
+        foreach ($records as $record) {
+            $list []= XxxStockSummary::fromRecord($record);
+        }
+
+        return $list;
     }
 
     //endregion
@@ -311,6 +427,30 @@ class Datastore
                     'stock_summary_id' => $record->getStockSummaryId()]);
 
             return $this->getStockTransaction($id);
+        } catch (QueryException $e) {
+            DB::rollBack();
+            // TODO - Log Error
+        }
+
+        return null;
+    }
+
+    public function updateStockTransaction(StockTransaction $transaction): ?StockTransaction
+    {
+        try {
+            $affected = DB::table('stock_transaction')->where('id', $transaction->getId())->where('lock_version',
+                $transaction->getLockVersion())->update(['operation' => $transaction->getOperation(),
+                'amount' => $transaction->getAmount(), 'stock_summary_id' => $transaction->getStockSummaryId(),
+                'lock_version' => ($transaction->getLockVersion() + 1)]);
+
+            if ($affected == 0) {
+                // TODO - Log failure to update row
+                return null;
+            }
+
+            DB::commit();
+
+            return $this->getStockTransaction($transaction->getId());
         } catch (QueryException $e) {
             DB::rollBack();
             // TODO - Log Error
