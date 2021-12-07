@@ -24,7 +24,6 @@ class ReportsController extends Controller
 {
     public function homePage(Request $request): ResponseView
     {
-        return View::make('reports.home');
+        return View::make('reports.home', ['active_page' => 'reports', 'logged_in' => false]);
     }
-
 }

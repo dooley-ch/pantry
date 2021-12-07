@@ -13,34 +13,34 @@
 |
 */
 
-$router->get('/', 'HomeController@homePage');
-$router->get('/setup', 'HomeController@setupPage');
-$router->get('/usage', 'HomeController@usagePage');
-$router->get('/about', 'HomeController@aboutPage');
+$router->get('/', ['as' => 'home', 'uses' => 'HomeController@homePage']);
+$router->get('/setup', ['as' => 'setup', 'uses' => 'HomeController@setupPage']);
+$router->get('/usage', ['as' => 'usage', 'uses' => 'HomeController@usagePage']);
+$router->get('/about', ['as' => 'about', 'uses' => 'HomeController@aboutPage']);
 
 $router->group(['prefix' => '/lookup/product'], function () use ($router) {
-    $router->get('code/{code}', 'ProductLookupController@getProductByCode');
-    $router->get('barcode/{barcode}', 'ProductLookupController@getProductByBarcode');
+    $router->get('code/{code}', ['as' => 'product-lookup-code', 'uses' => 'ProductLookupController@getProductByCode']);
+    $router->get('barcode/{barcode}', ['as' => 'product-lookup-barcode', 'uses' => 'ProductLookupController@getProductByBarcode']);
 });
 
 $router->group(['prefix' => '/api'], function () use ($router) {
-    $router->get('product/detail/{barcode}', 'ApiController@getProductDetails');
-    $router->get('product/add/{barcode}', 'ApiController@addProduct');
-    $router->get('product/remove/{barcode}', 'ApiController@removeProduct');
+    $router->get('product/detail/{barcode}', ['as' => 'product-api-detail', 'uses' => 'ApiController@getProductDetails']);
+    $router->get('product/add/{barcode}', ['as' => 'product-api-add', 'uses' => 'ApiController@addProduct']);
+    $router->get('product/remove/{barcode}', ['as' => 'product-api-add', 'uses' => 'ApiController@removeProduct']);
 });
 
 $router->group(['prefix' => '/product'], function () use ($router) {
-    $router->get('/', 'ProductController@homePage');
-    $router->get('detail/{barcode}', 'ProductController@details');
-    $router->get('add/{barcode}', 'ProductController@add');
-    $router->get('remove/{barcode}', 'ProductController@remove');
-    $router->get('delete/{barcode}', 'ProductController@delete');
+    $router->get('/', ['as' => 'product-home', 'uses' => 'ProductController@homePage']);
+    $router->get('detail/{barcode}', ['as' => 'product-detail', 'uses' => 'ProductController@details']);
+    $router->get('add/{barcode}', ['as' => 'product-add', 'uses' => 'ProductController@add']);
+    $router->get('remove/{barcode}', ['as' => 'product-remove', 'uses' => 'ProductController@remove']);
+    $router->get('delete/{barcode}', ['as' => 'product-delete', 'uses' => 'ProductController@delete']);
 });
 
 $router->group(['prefix' => '/user'], function () use ($router) {
-    $router->get('/', 'UserController@homePage');
+    $router->get('/', ['as' => 'user-home', 'uses' => 'UserController@homePage']);
 });
 
 $router->group(['prefix' => '/reports'], function () use ($router) {
-    $router->get('/', 'ReportsController@homePage');
+    $router->get('/', ['as' => 'reports-home', 'uses' => 'ReportsController@homePage']);
 });

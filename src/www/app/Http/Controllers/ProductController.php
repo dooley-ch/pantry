@@ -24,26 +24,26 @@ class ProductController extends Controller
 {
     public function homePage(Request $request): ResponseView
     {
-        return View::make('product.home');
+        return View::make('product.home', ['active_page' => 'product', 'logged_in' => false]);
     }
 
     public function details(Request $request, string $barcode): ResponseView
     {
-        return View::make('product.detail');
+        return View::make('product.detail', ['active_page' => 'product', 'logged_in' => false]);
     }
 
     public function add(Request $request, string $barcode): ResponseView
     {
-        return View::make('product.home');
+        return View::make('product.home', ['active_page' => 'product', 'logged_in' => false]);
     }
 
     public function remove(Request $request, string $barcode): ResponseView
     {
-        return View::make('product.home');
+        return View::make('product.home', ['active_page' => 'product', 'logged_in' => false]);
     }
 
     public function delete(Request $request, string $barcode): ResponseView
     {
-        return View::make('product.home');
+        return View::make('product.home', ['active_page' => 'product', 'logged_in' => false]);
     }
 }

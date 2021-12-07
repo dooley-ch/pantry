@@ -37,7 +37,7 @@ class ProductLookupController extends Controller
             return new Response("JSON Not Implemented: " . $code, 401);
         }
 
-        return View::make('product_lookup');
+        return View::make('product_lookup', ['active_page' => 'lookup', 'logged_in' => false]);
     }
 
     public function getProductByBarcode(Request $request, string $barcode): mixed
@@ -47,6 +47,6 @@ class ProductLookupController extends Controller
             return new Response("JSON Not Implemented: " . $barcode, 401);
         }
 
-        return View::make('product_lookup');
+        return View::make('product_lookup', ['active_page' => 'lookup', 'logged_in' => false]);
     }
 }

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<AxialisIconCollection>
+  <Name>images</Name>
+  <Icon>
+    <Name>product-search</Name>
+    <StockIconName>product.axvi</StockIconName>
+    <StockIconFamily>Axialis Flat Design</StockIconFamily>
+    <StockIconSet>Business</StockIconSet>
+    <StockOverlayName>search.axvi</StockOverlayName>
+    <StockOverlayPos>4</StockOverlayPos>
+    <ResourceIDValue>100</ResourceIDValue>
+    <ResourceID>ID_PRODUCT-SEARCH</ResourceID>
+  </Icon>
+</AxialisIconCollection>

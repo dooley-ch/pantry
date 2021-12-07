@@ -1,4 +1,14 @@
-<!DOCTYPE html>
+@php
+    if (!isset($active_page)) {
+        $active_page = 'home';
+    }
+
+    if (!isset($logged_in)) {
+        $logged_in = false;
+    }
+@endphp
+
+    <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
     <head>
         <meta charset="UTF-8">
@@ -8,11 +18,13 @@
     </head>
     <body>
         <header>
-            @include('layouts.shared.header')
+            @include('layouts.shared.header', ['active_page' => $active_page, 'logged_in' => $logged_in])
         </header>
 
         <main>
-            @yield('content')
+            <section class="container">
+                @yield('content')
+            </section>
         </main>
 
         <footer>

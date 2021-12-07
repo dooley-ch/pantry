@@ -23,21 +23,21 @@ class HomeController extends \Laravel\Lumen\Routing\Controller
 {
     public function homePage(Request $request): ResponseView
     {
-        return View::make('home');
+        return View::make('home', ['active_page' => 'home', 'logged_in' => false]);
     }
 
     public function usagePage(Request $request): ResponseView
     {
-        return View::make('usage');
+        return View::make('usage', ['active_page' => 'usage', 'logged_in' => false]);
     }
 
     public function aboutPage(Request $request): ResponseView
     {
-        return View::make('about');
+        return View::make('about', ['active_page' => 'about', 'logged_in' => false]);
     }
 
     public function setupPage(Request $request): ResponseView
     {
-        return View::make('setup');
+        return View::make('setup', ['active_page' => 'setup', 'logged_in' => false]);
     }
 }

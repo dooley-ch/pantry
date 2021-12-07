@@ -24,6 +24,6 @@ class UserController extends Controller
 {
     public function homePage(Request $request): ResponseView
     {
-        return View::make('user.home');
+        return View::make('user.home', ['active_page' => 'user', 'logged_in' => false]);
     }
 }
