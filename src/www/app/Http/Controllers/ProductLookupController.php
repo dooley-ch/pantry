@@ -18,6 +18,8 @@ namespace App\Http\Controllers;
 use App\Core\OpenFoodRepoLookup;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\View;
+use Illuminate\View\View as ResponseView;
 
 class ProductLookupController extends Controller
 {
@@ -28,23 +30,23 @@ class ProductLookupController extends Controller
         $this->repoLookup = new OpenFoodRepoLookup();
     }
 
-    public function getProductByCode(Request $request, string $code): Response
+    public function getProductByCode(Request $request, string $code): mixed
     {
         if ($request->wantsJson()) {
             // TODO - Return JSON
             return new Response("JSON Not Implemented: " . $code, 401);
         }
 
-        return new Response("Product By Code: " . $code, 200);
+        return View::make('product_lookup');
     }
 
-    public function getProductByBarcode(Request $request, string $barcode): Response
+    public function getProductByBarcode(Request $request, string $barcode): mixed
     {
         if ($request->wantsJson()) {
             // TODO - Return JSON
             return new Response("JSON Not Implemented: " . $barcode, 401);
         }
 
-        return Response("Product By Barcode: " . $barcode, 200);
+        return View::make('product_lookup');
     }
 }

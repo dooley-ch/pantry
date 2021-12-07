@@ -17,12 +17,13 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\View;
+use Illuminate\View\View as ResponseView;
 
 class UserController extends Controller
 {
-    public function homePage(Request $request): Response
+    public function homePage(Request $request): ResponseView
     {
-        return new Response("User Home Page", 200);
+        return View::make('user.home');
     }
-
 }

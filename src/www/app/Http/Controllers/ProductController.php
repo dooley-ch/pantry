@@ -17,31 +17,33 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\View;
+use Illuminate\View\View as ResponseView;
 
 class ProductController extends Controller
 {
-    public function homePage(Request $request): Response
+    public function homePage(Request $request): ResponseView
     {
-        return new Response("Product Home Page", 200);
+        return View::make('product.home');
     }
 
-    public function details(Request $request, string $barcode): Response
+    public function details(Request $request, string $barcode): ResponseView
     {
-        return new Response("Product Details", 200);
+        return View::make('product.detail');
     }
 
-    public function add(Request $request, string $barcode): Response
+    public function add(Request $request, string $barcode): ResponseView
     {
-        return new Response("Add Product", 200);
+        return View::make('product.home');
     }
 
-    public function remove(Request $request, string $barcode): Response
+    public function remove(Request $request, string $barcode): ResponseView
     {
-        return new Response("Remove Product", 200);
+        return View::make('product.home');
     }
 
-    public function delete(Request $request, string $barcode): Response
+    public function delete(Request $request, string $barcode): ResponseView
     {
-        return new Response("Delete Product", 200);
+        return View::make('product.home');
     }
 }

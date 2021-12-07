@@ -16,27 +16,28 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
+use Illuminate\Support\Facades\View;
+use Illuminate\View\View as ResponseView;
 
 class HomeController extends \Laravel\Lumen\Routing\Controller
 {
-    public function homePage(Request $request): Response
+    public function homePage(Request $request): ResponseView
     {
-        return new Response("Home Page", 200);
+        return View::make('home');
     }
 
-    public function usagePage(Request $request): Response
+    public function usagePage(Request $request): ResponseView
     {
-        return new Response("Usage Page", 200);
+        return View::make('usage');
     }
 
-    public function aboutPage(Request $request): Response
+    public function aboutPage(Request $request): ResponseView
     {
-        return new Response("About Page", 200);
+        return View::make('about');
     }
 
-    public function setupPage(Request $request): Response
+    public function setupPage(Request $request): ResponseView
     {
-        return new Response("Setup Page", 200);
+        return View::make('setup');
     }
 }

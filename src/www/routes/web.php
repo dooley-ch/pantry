@@ -14,6 +14,7 @@
 */
 
 $router->get('/', 'HomeController@homePage');
+$router->get('/setup', 'HomeController@setupPage');
 $router->get('/usage', 'HomeController@usagePage');
 $router->get('/about', 'HomeController@aboutPage');
 
