@@ -6,7 +6,7 @@
 >
     <testsuites>
         <testsuite name="Application Test Suite">
-            <directory suffix="Tests.php">./tests</directory>
+            <directory suffix="Tests.php">./tests/data</directory>
         </testsuite>
     </testsuites>
     <php>

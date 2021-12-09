@@ -33,25 +33,12 @@ class DatastoreInsertTests extends TestCase
     public function insert_product_is_valid()
     {
         $store = new Datastore();
-        $record = Product::asNew('01234567896', 'Product 6', 'Product 6 Notes');
+        $record = Product::asNew('01234569001', 'Product 9001', 'Product 9001 Notes');
 
         $record = $store->insertProduct($record);
 
         $this->assertNotNull($record);
         $this->assertGreaterThan(5, $record->getId());
-    }
-
-    /**
-     * @test
-     */
-    public function insert_product_invalid()
-    {
-        $store = new Datastore();
-        $record = Product::asNew('01234567895', 'Product 90', 'Product 90 Notes');
-
-        $record = $store->insertProduct($record);
-
-        $this->assertNull($record);
     }
 
     //endregion
@@ -62,7 +49,7 @@ class DatastoreInsertTests extends TestCase
     public function insert_stock_summary_is_valid()
     {
         $store = new Datastore();
-        $product = Product::asNew('01234567897', 'Product 7', 'Product 7 Notes');
+        $product = Product::asNew('01234569010', 'Product 9010', 'Product 9010 Notes');
         $product = $store->insertProduct($product);
         $this->assertNotNull($product);
 
@@ -79,7 +66,7 @@ class DatastoreInsertTests extends TestCase
     public function insert_stock_transaction_is_valid()
     {
         $store = new Datastore();
-        $product = Product::asNew('01234567890', 'Product 8', 'Product 8 Notes');
+        $product = Product::asNew('01234569015', 'Product 9015', 'Product 9015 Notes');
         $product = $store->insertProduct($product);
         $this->assertNotNull($product);
 
@@ -100,7 +87,7 @@ class DatastoreInsertTests extends TestCase
     public function insert_product_image_is_valid()
     {
         $store = new Datastore();
-        $product = Product::asNew('01234567899', 'Product 9', 'Product 9 Notes');
+        $product = Product::asNew('01234569020', 'Product 9020', 'Product 9020 Notes');
         $product = $store->insertProduct($product);
         $this->assertNotNull($product);
 
@@ -117,7 +104,7 @@ class DatastoreInsertTests extends TestCase
     public function insert_image_is_valid()
     {
         $store = new Datastore();
-        $product = Product::asNew('01234567901', 'Product 10', 'Product 10 Notes');
+        $product = Product::asNew('01234569025', 'Product 9025', 'Product 9025 Notes');
         $product = $store->insertProduct($product);
         $this->assertNotNull($product);
 
