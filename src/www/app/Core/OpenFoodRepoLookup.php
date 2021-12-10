@@ -61,6 +61,9 @@ class OpenFoodRepoLookup
         return null;
     }
 
+    /**
+     * @throws \Exception
+     */
     public function getByBarcode(string $barcode): ?OpenFoodProduct
     {
         $uri = 'products/';
@@ -72,7 +75,9 @@ class OpenFoodRepoLookup
             if ($response->getStatusCode() == 200) {
                 $body = $response->getBody();
                 $data = json_decode((string)$body);
-                return new OpenFoodProduct($data->data[0]);
+                if (count($data->data) != 0) {
+                    return new OpenFoodProduct($data->data[0]);
+                }
             }
 
             Log::warning('Product lookup by barcode not found (' . $barcode . '): ');

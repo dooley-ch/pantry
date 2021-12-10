@@ -64,7 +64,7 @@
                 Product
             </a>
 
-            <a class="navbar-item {{ $lockup_is_active }}" href="{{ route('product-lookup-code') }}">
+            <a class="navbar-item {{ $lockup_is_active }}" href="{{ route('lookup-homepage') }}">
                 Look Up
             </a>
 

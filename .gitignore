@@ -1,3 +1,4 @@
 data/open_food_facts/products_2021_11_26.csv
 resources/output
 src/www/node_modules
+src/www/storage/framework/sessions

@@ -18,10 +18,8 @@ $router->get('/setup', ['as' => 'setup', 'uses' => 'HomeController@setupPage']);
 $router->get('/usage', ['as' => 'usage', 'uses' => 'HomeController@usagePage']);
 $router->get('/about', ['as' => 'about', 'uses' => 'HomeController@aboutPage']);
 
-$router->group(['prefix' => '/lookup/product'], function () use ($router) {
-    $router->get('code/{code}', ['as' => 'product-lookup-code', 'uses' => 'ProductLookupController@getProductByCode']);
-    $router->get('barcode/{barcode}', ['as' => 'product-lookup-barcode', 'uses' => 'ProductLookupController@getProductByBarcode']);
-});
+$router->get('/lookup', ['as' => 'lookup-homepage', 'uses' => 'ProductLookupController@homePage']);
+$router->post('/lookup', ['as' => 'lookup-search', 'uses' => 'ProductLookupController@lookup']);
 
 $router->group(['prefix' => '/api'], function () use ($router) {
     $router->get('product/detail/{barcode}', ['as' => 'product-api-detail', 'uses' => 'ApiController@getProductDetails']);

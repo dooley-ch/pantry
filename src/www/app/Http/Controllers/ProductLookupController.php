@@ -20,33 +20,49 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\View;
 use Illuminate\View\View as ResponseView;
+use Illuminate\Http\RedirectResponse;
+use Laravel\Lumen\Http\Redirector;
+use function PHPUnit\Framework\isNull;
 
 class ProductLookupController extends Controller
 {
-    private OpenFoodRepoLookup $repoLookup;
-
-    public function __construct()
+    public function homePage(Request $request): ResponseView
     {
-        $this->repoLookup = new OpenFoodRepoLookup();
-    }
+        $msg = $request->session()->get('lookup_message');
 
-    public function getProductByCode(Request $request, string $code): mixed
-    {
-        if ($request->wantsJson()) {
-            // TODO - Return JSON
-            return new Response("JSON Not Implemented: " . $code, 401);
+        if (isset($msg)) {
+            $msg = json_decode($msg);
+        } else {
+            $msg = null;
         }
 
-        return View::make('product_lookup', ['active_page' => 'lookup', 'logged_in' => false]);
+        return View::make('product_lookup', ['product' => null, 'active_page' => 'lookup', 'logged_in' => false, 'message' => $msg]);
     }
 
-    public function getProductByBarcode(Request $request, string $barcode): mixed
+    public function lookup(Request $request): RedirectResponse|Redirector|Response|ResponseView
     {
-        if ($request->wantsJson()) {
-            // TODO - Return JSON
-            return new Response("JSON Not Implemented: " . $barcode, 401);
+        if (!$request->hasAny('search-type', 'search-value')) {
+            $msg = json_encode(['type' => Controller::WARNING, 'message' => 'Incorrect or missing parameters supplied for the search.']);
+            $request->session()->flash('lookup_message', $msg);
+            return redirect(route('lookup-homepage'));
         }
 
-        return View::make('product_lookup', ['active_page' => 'lookup', 'logged_in' => false]);
+        $lookup = new OpenFoodRepoLookup();
+        $request_data = $request->all('search-type', 'search-value');
+
+        if ($request_data['search-type'] == 'Code') {
+            $product = $lookup->getByCode($request_data['search-value']);
+        } else {
+            $product = $lookup->getByBarcode($request_data['search-value']);
+        }
+
+        if (isNull($product)) {
+            $msg = json_encode(['type' => Controller::INFO, 'message' => 'Product not found.']);
+            $request->session()->flash('lookup_message', $msg);
+            return redirect(route('lookup-homepage'));
+        }
+
+        return View::make('product_lookup', ['product' => $product, 'active_page' => 'lookup',
+                                'logged_in' => false, 'message' => null]);
     }
 }

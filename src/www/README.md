@@ -2,7 +2,49 @@
 
 | Area              | Location                                           | Comment                                      |
 |-------------------|----------------------------------------------------|----------------------------------------------|
-| Log File Names    | /vendor/laravel/lumen-framework/config/logging.php | Search for the mane lumen.log and replace it |
+| Log File Names    | /vendor/laravel/lumen-framework/config/logging.php | Search for the name lumen.log and replace it |
+
+## Install Session Management 
+
+### Step 1
+
+Install illuminate/session using: `composer require illuminate/session` 
+
+### Step 2
+
+Add middleware to bootstrap/app.php:
+
+`
+$app->middleware([\Illuminate\Session\Middleware\StartSession::class,]);
+`
+### Step 3
+
+Now add config/session.php to the application.  The contents can be found in the 
+[Laravel official repo](https://github.com/laravel/laravel/blob/master/config/session.php). 
+
+### Step 4
+
+Create session storage directory by:
+
+`
+mkdir -p storage/framework/sessions
+`
+
+### Step 5
+
+In bootstrap/app.php add bindings for \Illuminate\Session\SessionManager:
+
+`
+$app->singleton(Illuminate\Session\SessionManager::class, function () use ($app) {
+return $app->loadComponent('session', Illuminate\Session\SessionServiceProvider::class, 'session');
+});
+$app->singleton('session.store', function () use ($app) {
+return $app->loadComponent('session', Illuminate\Session\SessionServiceProvider::class, 'session.store');
+});
+`
+
+
+
 
 
 # Lumen PHP Framework
