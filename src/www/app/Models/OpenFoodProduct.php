@@ -4,7 +4,9 @@
 //
 //  Created: 08-12-2021
 //
-//  Copyright (c) 2021 James Dooley <james@dooley.ch>
+//  Copyright (c) 2021 James Dooley
+//
+//  Distributed under the MIT License (http://opensource.org/licenses/MIT).
 //
 //  History:
 //  08-12-2021: Initial version
@@ -20,6 +22,13 @@ use Illuminate\Support\Facades\Log;
 use stdClass;
 use Carbon\Carbon;
 
+/**
+ * Class OpenFoodProduct
+ *
+ * This class holds all the product lookup data returned from the lookup service
+ *
+ * @package App\Models
+ */
 class OpenFoodProduct
 {
     private int $id;

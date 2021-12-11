@@ -4,7 +4,9 @@
 //
 //  Created: 03-12-2021
 //
-//  Copyright (c) 2021 James Dooley <james@dooley.ch>
+//  Copyright (c) 2021 James Dooley
+//
+//  Distributed under the MIT License (http://opensource.org/licenses/MIT).
 //
 //  History:
 //  03-12-2021: Initial version
@@ -18,6 +20,13 @@ namespace App\Models;
 use \stdClass;
 use Carbon\Carbon;
 
+/**
+ * Class XxxProductImage
+ *
+ * This class maps to the xxx_product_image table in the database
+ *
+ * @package App\Models
+ */
 class XxxProductImage extends AuditRecord
 {
     public function __construct(int $id, Carbon $logged_at, string $action, int $record_id, int $lock_version,

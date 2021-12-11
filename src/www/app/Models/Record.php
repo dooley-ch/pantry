@@ -4,7 +4,9 @@
 //
 //  Created: 03-12-2021
 //
-//  Copyright (c) 2021 James Dooley <james@dooley.ch>
+//  Copyright (c) 2021 James Dooley
+//
+//  Distributed under the MIT License (http://opensource.org/licenses/MIT).
 //
 //  History:
 //  03-12-2021: Initial version
@@ -17,7 +19,15 @@ namespace App\Models;
 
 use Carbon\Carbon;
 
-class Record
+/**
+ * Class Record
+ *
+ * This class is the base class for all business records.  It provides the common fields present in
+ * all business records
+ *
+ * @package App\Models
+ */
+abstract class Record
 {
     private int $id;
     private int $lock_version;

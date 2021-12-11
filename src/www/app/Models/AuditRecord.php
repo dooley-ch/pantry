@@ -4,7 +4,9 @@
 //
 //  Created: 03-12-2021
 //
-//  Copyright (c) 2021 James Dooley <james@dooley.ch>
+//  Copyright (c) 2021 James Dooley
+//
+//  Distributed under the MIT License (http://opensource.org/licenses/MIT).
 //
 //  History:
 //  03-12-2021: Initial version
@@ -17,7 +19,15 @@ namespace App\Models;
 
 use Carbon\Carbon;
 
-class AuditRecord
+/**
+ * Class AuditRecord
+ *
+ * This class is the base class for all audit records.  It provides the common fields present in
+ * all audit records
+ *
+ * @package App\Models
+ */
+abstract class AuditRecord
 {
     public function __construct(private int $id, private Carbon $logged_at, private string $action,
                                 private int $record_id, private int $lock_version)
