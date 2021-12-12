@@ -1,4 +1,5 @@
 @php
+    // Handles any page flash message
     $flash_show = false;
     $flash_class = '';
     $flash_content = '';
@@ -21,6 +22,13 @@
                 $flash_class = 'is-danger';
                 break;
         }
+    }
+
+    // Handles the display of the product if found
+    $show_product = false;
+
+    if (isset($product)) {
+        $show_product = true;
     }
 @endphp
 
@@ -60,6 +68,82 @@
                     </p>
                 </div>
             </form>
+
+            @if ($show_product)
+                <div class="content pb-6">
+                    <!-- Padding -->
+                </div>
+                <div class="columns">
+                    <div class="column is-2">
+                    </div>
+                    <div class="column box">
+                        <div class="content">
+                            <div class="field is-horizontal">
+                                <div class="field-label is-normal">
+                                    <label class="label">Code</label>
+                                </div>
+                                <div class="field-body">
+                                    <div class="field">
+                                        <p class="control">
+                                            <input class="input" type="text" value="{{ $product->getId() }}" readonly>
+                                        </p>
+                                    </div>
+                                    <div class="field-label is-normal">
+                                        <label class="label">Barcode</label>
+                                    </div>
+                                    <div class="field is-expanded">
+                                        <p class="control">
+                                            <input class="input" type="text" value="{{ $product->getBarcode() }}" readonly>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="field is-horizontal">
+                                <div class="field-label is-normal">
+                                    <label class="label">Name</label>
+                                </div>
+                                <div class="field-body">
+                                    <div class="field">
+                                        <p class="control is-expanded">
+                                            <input class="input" type="text" value="{{ $product->getName() }}" readonly>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="field is-horizontal">
+                                <div class="field-label is-normal">
+                                    <label class="label">Country:</label>
+                                </div>
+                                <div class="field-body">
+                                    <div class="field">
+                                        <p class="control">
+                                            <input class="input" type="text" value="{{ $product->getCountry() }}" readonly>
+                                        </p>
+                                    </div>
+                                    <div class="field-label is-normal">
+                                        <label class="label">Status</label>
+                                    </div>
+                                    <div class="field is-expanded">
+                                        <p class="control">
+                                            <input class="input" type="text" value="{{ $product->getStatus() }}" readonly>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            @if ($can_add)
+                            <div class="field is-grouped">
+                                <div class="control">
+                                    <a class="button is-link is-success" href="{{ route('product-add', $product->getBarcode()) }}">Add Product</a>
+                                </div>
+                            </div>
+                            @endif
+                        </div>
+                    </div>
+                    <div class="column is-2">
+                    </div>
+                </div>
+            @endif
+
         </div>
         <div class="column is-one-fifth"></div>
     </div>

@@ -15,6 +15,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use App\Core\Datastore;
 use App\Core\OpenFoodRepoLookup;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -80,7 +81,14 @@ class ProductLookupController extends Controller
             return redirect(route('lookup-homepage'));
         }
 
-        return View::make('product_lookup', ['product' => $product, 'active_page' => 'lookup',
+        // Check if product has already been added
+        $store = new Datastore();
+        $database_product = $store->getProductByBarcode($product->getBarcode());
+        $can_add = true;
+        if ($database_product)
+            $can_add = false;
+
+        return View::make('product_lookup', ['product' => $product, 'can_add' => $can_add, 'active_page' => 'lookup',
             'logged_in' => false, 'message' => null]);
     }
 }

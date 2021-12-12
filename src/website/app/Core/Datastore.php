@@ -17,6 +17,7 @@ declare(strict_types=1);
 
 namespace App\Core;
 
+use App\Models\OpenFoodProduct;
 use App\Models\Product;
 use App\Models\ProductImage;
 use App\Models\StockSummary;
@@ -795,6 +796,15 @@ class Datastore
         }
 
         return null;
+    }
+
+    //endregion
+
+    //region Operations
+
+    public function addProduct(OpenFoodProduct $open_product): int|null
+    {
+        throw new \Exception('Not implemented');
     }
 
     //endregion
