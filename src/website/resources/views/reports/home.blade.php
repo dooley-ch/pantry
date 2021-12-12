@@ -1,6 +1,6 @@
 @extends('layouts.master')
 
-@section('title', 'Pantry | Home')
+@section('title', 'Pantry | Reports')
 
 @section('content')
     <p>Home Page - Reports</p>
