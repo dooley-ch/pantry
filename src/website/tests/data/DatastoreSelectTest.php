@@ -107,6 +107,17 @@ class DatastoreSelectTest extends TestCase
         $this->assertGreaterThanOrEqual(5, count($list));
     }
 
+    /**
+     * @test
+     */
+    public function get_product_letters_is_valid()
+    {
+        $store = new Datastore();
+        $list = $store->getProductLetters();
+
+        $this->assertGreaterThanOrEqual(5, count($list));
+    }
+
     //endregion
 
     //region Product Image

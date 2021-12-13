@@ -46,17 +46,24 @@ class ProductController extends Controller
 
     public function homePage(string $letter = null): ResponseView
     {
+        $store = new Datastore();
+        $letters = $store->getProductLetters();
+
         if (!isset($letter)) {
-            $letter = 'A';
+            if (count($letters)) {
+                $letter = $letters[0];
+            } else {
+                $letter = 'A';
+            }
         } else {
             $letter = strtoupper($letter);
         }
 
-        $store = new Datastore();
         $records = $store->getProductExtended($letter);
 
         return View::make('product.home',
-            ['products' => $records, 'active_page' => 'product', 'logged_in' => false, 'message' => null]);
+            ['products' => $records, 'letters' => $letters, 'current_letter' => $letter, 'active_page' => 'product',
+                'logged_in' => false, 'message' => null]);
     }
 
     public function details(Request $request, string $barcode): ResponseView
@@ -101,11 +108,16 @@ class ProductController extends Controller
         }
 
         // Display the product page
+        $letters = $store->getProductLetters();
+        $letter = strtoupper(substr($lookup_product->getName(), 0, 1));
+        $records = $store->getProductExtended($letter);
+
         $msg = new stdClass();
         $msg->type = Controller::INFO;
         $msg->content = 'New product successfully added to the application (' . $product_id . ')';
 
-        return View::make('product.home', ['active_page' => 'product', 'logged_in' => false, 'message' => $msg]);
+        return View::make('product.home', ['products' => $records, 'letters' => $letters, 'current_letter' => $letter,
+            'active_page' => 'product', 'logged_in' => false, 'message' => $msg]);
     }
 
     public function remove(Request $request, string $barcode): ResponseView

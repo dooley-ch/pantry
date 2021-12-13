@@ -243,14 +243,32 @@ class Datastore
         $letter = $letter . '%';
 
         try {
-            $rows = DB::table('product')->join('stock_summary',
-                function ($join) { $join->on('product.id', '=', 'stock_summary.product_id'); })->get();
+            $rows = DB::select("SELECT p.id, p.barcode, p.name, p.description, p.lock_version, p.created_at,
+                                        p.updated_at, s.amount  FROM product AS p INNER JOIN stock_summary AS s ON (p.id = s.product_id)
+                                        WHERE (UPPER(p.name) LIKE ?);", [$letter]);
 
             foreach ($rows as $row) {
                 $records []= ProductExtended::fromRecord($row);
             }
         } catch (QueryException $e) {
             Log::error('Failed to return rows for (' . $letter . '): ' . $e->getMessage());
+        }
+
+        return $records;
+    }
+
+    public function getProductLetters(): array
+    {
+        $records = [];
+
+        try {
+            $rows = DB::select("SELECT DISTINCT LEFT(p.name, 1) AS alpha FROM product AS p ORDER BY alpha");
+
+            foreach ($rows as $row) {
+                $records []= $row->alpha;
+            }
+        } catch (QueryException $e) {
+            Log::error('Failed to return product letters: ' . $e->getMessage());
         }
 
         return $records;

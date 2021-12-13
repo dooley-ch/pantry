@@ -54,35 +54,22 @@
             @endif
 
             <nav class="pagination" role="navigation" aria-label="pagination">
-                <a class="pagination-previous is-hidden">Previous</a>
-                <a class="pagination-next" href="{{ route('product-home', 'B') }}">Next page</a>
                 <ul class="pagination-list">
-                    <li>
-                        <a class="pagination-link is-current" aria-label="Goto page A" href="{{ route('product-home', 'A') }}">A</a>
+                    @foreach($letters as $letter )
+                        @if($letter == $current_letter)
+                            <li>
+                        <a class="pagination-link is-current" aria-label="Goto page A" href="{{ route('product-home', $letter) }}">
+                            {{ $letter }}
+                        </a>
                     </li>
-                    <li>
-                        <a class="pagination-link" aria-label="Goto page B" href="{{ route('product-home', 'B') }}">B</a>
-                    </li>
-                    <li>
-                        <a class="pagination-link" aria-label="Goto page C" href="{{ route('product-home', 'C') }}">C</a>
-                    </li>
-
-                    <li>
-                        <span class="pagination-ellipsis">&hellip;</span>
-                    </li>
-                    <li>
-                        <a class="pagination-link" aria-label="Goto page Z" href="{{ route('product-home', 'Z') }}">Z</a>
-                    </li>
-                    <li>
-                        <a class="pagination-link" aria-label="Goto page 0" href="{{ route('product-home', '0') }}">0</a>
-                    </li>
-
-                    <li>
-                        <span class="pagination-ellipsis">&hellip;</span>
-                    </li>
-                    <li>
-                        <a class="pagination-link" aria-label="Goto page 9" href="{{ route('product-home', '9') }}">9</a>
-                    </li>
+                        @else
+                            <li>
+                                <a class="pagination-link" aria-label="Goto page A" href="{{ route('product-home', $letter) }}">
+                                    {{ $letter }}
+                                </a>
+                            </li>
+                        @endif
+                    @endforeach
                 </ul>
             </nav>
 
