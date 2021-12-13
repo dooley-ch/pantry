@@ -29,7 +29,7 @@ class DataOperationsTest extends TestCase
     {
         // Get the product details
         $lookup = new OpenFoodRepoLookup();
-        $lookup_product = $lookup->getByBarcode('');
+        $lookup_product = $lookup->getByBarcode('7610809098257');
 
         $this->assertNotNull($lookup_product);
 

@@ -34,11 +34,17 @@ Route::group(['prefix' => '/api'], function () {
 });
 
 Route::group(['prefix' => '/product'], function () {
-    Route::get('/', [ProductController::class, 'homePage'])->name('product-home');
+    Route::get('/{letter?}', [ProductController::class, 'homePage'])->name('product-home');
     Route::get('detail/{barcode}', [ProductController::class, 'details'])->name('product-detail');
     Route::get('add/{barcode}', [ProductController::class, 'add'])->name('product-add');
     Route::get('remove/{barcode}', [ProductController::class, 'remove'])->name('product-remove');
     Route::get('delete/{barcode}', [ProductController::class, 'delete'])->name('product-delete');
+
+    Route::group(['prefix' => 'find'], function () {
+        Route::get('by-id', [ProductController::class, 'findById'])->name('product-find-by-id');
+        Route::get('by-barcode', [ProductController::class, 'findByBarcode'])->name('product-find-by-barcode');
+        Route::get('by-name', [ProductController::class, 'findByName'])->name('product-find-by-name');
+    });
 });
 
 Route::group(['prefix' => '/user'], function () {

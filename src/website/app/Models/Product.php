@@ -67,7 +67,7 @@ class Product extends Record
 
     public static function fromRecord(stdClass $record): Product
     {
-        $id = intval($record->id);
+        $id = $record->id;
         $barcode = $record->barcode;
         $name = $record->name;
         $description = $record->description;

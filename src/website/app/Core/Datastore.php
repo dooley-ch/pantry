@@ -19,6 +19,7 @@ namespace App\Core;
 
 use App\Models\OpenFoodProduct;
 use App\Models\Product;
+use App\Models\ProductExtended;
 use App\Models\ProductImage;
 use App\Models\StockSummary;
 use App\Models\StockTransaction;
@@ -234,6 +235,25 @@ class Datastore
         }
 
         return null;
+    }
+
+    public function getProductExtended(string $letter): array
+    {
+        $records = [];
+        $letter = $letter . '%';
+
+        try {
+            $rows = DB::table('product')->join('stock_summary',
+                function ($join) { $join->on('product.id', '=', 'stock_summary.product_id'); })->get();
+
+            foreach ($rows as $row) {
+                $records []= ProductExtended::fromRecord($row);
+            }
+        } catch (QueryException $e) {
+            Log::error('Failed to return rows for (' . $letter . '): ' . $e->getMessage());
+        }
+
+        return $records;
     }
 
     /**
