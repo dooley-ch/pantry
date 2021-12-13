@@ -27,8 +27,8 @@ INSERT INTO stock_summary (id, amount, product_id) VALUES (3, 2, 3);
 INSERT INTO stock_summary (id, amount, product_id) VALUES (4, 1, 4);
 INSERT INTO stock_summary (id, amount, product_id) VALUES (5, 2, 5);
 
-INSERT INTO xxx_stock_summary (action, record_id, amount, lock_version)
-    SELECT 'I', id, amount, product_id FROM stock_summary;
+INSERT INTO xxx_stock_summary (action, record_id, amount, product_id, lock_version)
+    SELECT 'I', id, amount, product_id, lock_version FROM stock_summary;
 
 INSERT INTO stock_transaction (id, operation, amount, stock_summary_id) VALUES (1, 'A', 1, 1);
 INSERT INTO stock_transaction (id, operation, amount, stock_summary_id) VALUES (2, 'A', 1, 1);

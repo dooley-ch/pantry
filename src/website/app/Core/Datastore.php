@@ -804,7 +804,31 @@ class Datastore
 
     public function addProduct(OpenFoodProduct $open_product): int|null
     {
-        throw new \Exception('Not implemented');
+        DB::beginTransaction();
+
+        try {
+            // Insert Product
+            $product_id = DB::table('product')->insertGetId(['barcode' => $open_product->getBarcode(),
+                'name' => $open_product->getName(), 'description' => '']);
+
+            DB::statement("INSERT INTO xxx_product (action, record_id, barcode, name, description, lock_version)
+                    SELECT 'I', id, barcode, name, description, lock_version FROM product WHERE (id = ?);", [$product_id]);
+
+            // Insert Product Summary
+            $id = DB::table('stock_summary')->insertGetId(['amount' => 0, 'product_id' => $product_id]);
+
+            DB::statement("INSERT INTO xxx_stock_summary (action, record_id, amount, product_id, lock_version)
+                                    SELECT 'I', id, amount, product_id, lock_version FROM stock_summary WHERE (id = ?);", [$id]);
+
+            DB::commit();
+
+            return $id;
+        } catch (QueryException $e) {
+            DB::rollBack();
+            Log::error('Failed to insert new product (' . $open_product->getBarcode() . '): ' . $e->getMessage());
+        }
+
+        return null;
     }
 
     //endregion
