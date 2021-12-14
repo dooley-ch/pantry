@@ -44,6 +44,9 @@ Route::group(['prefix' => '/product'], function () {
         Route::get('by-id', [ProductController::class, 'findById'])->name('product-find-by-id');
         Route::get('by-barcode', [ProductController::class, 'findByBarcode'])->name('product-find-by-barcode');
         Route::get('by-name', [ProductController::class, 'findByName'])->name('product-find-by-name');
+        Route::post('by-id-action', [ProductController::class, 'findByIdAction'])->name('product-find-by-id-action');
+        Route::post('by-barcode-action', [ProductController::class, 'findByBarcodeAction'])->name('product-find-by-barcode-action');
+        Route::post('by-name-action', [ProductController::class, 'findByNameAction'])->name('product-find-by-name-action');
     });
 });
 

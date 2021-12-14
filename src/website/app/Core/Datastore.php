@@ -237,6 +237,64 @@ class Datastore
         return null;
     }
 
+    public function findProductsById(int $id): array
+    {
+        $records = [];
+
+        try {
+            $rows = DB::select("SELECT p.id, p.barcode, p.name, p.description, p.lock_version, p.created_at,
+                                        p.updated_at, s.amount  FROM product AS p INNER JOIN stock_summary AS s ON (p.id = s.product_id)
+                                        WHERE (p.id = ?);", [$id]);
+
+            foreach ($rows as $row) {
+                $records []= ProductExtended::fromRecord($row);
+            }
+        } catch (QueryException $e) {
+            Log::error('Failed to return rows for id: ' . $id . ': ' . $e->getMessage());
+        }
+
+        return $records;
+    }
+
+    public function findProductsByBarcode(string $barcode): array
+    {
+        $records = [];
+
+        try {
+            $rows = DB::select("SELECT p.id, p.barcode, p.name, p.description, p.lock_version, p.created_at,
+                                        p.updated_at, s.amount  FROM product AS p INNER JOIN stock_summary AS s ON (p.id = s.product_id)
+                                        WHERE (p.barcode = ?);", [$barcode]);
+
+            foreach ($rows as $row) {
+                $records []= ProductExtended::fromRecord($row);
+            }
+        } catch (QueryException $e) {
+            Log::error('Failed to return rows for barcode: ' . $barcode . ': ' . $e->getMessage());
+        }
+
+        return $records;
+    }
+
+    public function findProductsByName(string $name): array
+    {
+        $records = [];
+        $name = '%' . $name . '%';
+
+        try {
+            $rows = DB::select("SELECT p.id, p.barcode, p.name, p.description, p.lock_version, p.created_at,
+                                        p.updated_at, s.amount  FROM product AS p INNER JOIN stock_summary AS s ON (p.id = s.product_id)
+                                        WHERE (p.name LIKE ?);", [$name]);
+
+            foreach ($rows as $row) {
+                $records []= ProductExtended::fromRecord($row);
+            }
+        } catch (QueryException $e) {
+            Log::error('Failed to return rows for (' . $name . '): ' . $e->getMessage());
+        }
+
+        return $records;
+    }
+
     public function getProductExtended(string $letter): array
     {
         $records = [];

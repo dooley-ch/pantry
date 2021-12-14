@@ -34,16 +34,7 @@
 
     <div class="columns">
         <div class="column is-2">
-            <aside class="menu box">
-                <p class="menu-label">
-                    Find Product
-                </p>
-                <ul class="menu-list">
-                    <li><a href="{{ route('product-find-by-id') }}">By Name</a></li>
-                    <li><a href="{{ route('product-find-by-barcode') }}">By Barcode</a></li>
-                    <li><a href="{{ route('product-find-by-name') }}">By Id</a></li>
-                </ul>
-            </aside>
+            @include('layouts.product.menu')
         </div>
         <div class="column">
             @if ($flash_show)
@@ -54,6 +45,12 @@
             @endif
 
             <nav class="pagination" role="navigation" aria-label="pagination">
+                <a class="pagination-next" href="{{ route('lookup-homepage') }}">
+                    <span class="icon">
+                        <i class="las la-plus-circle la-lg"></i>
+                    </span>
+                    <span>Add Product</span>
+                </a>
                 <ul class="pagination-list">
                     @foreach($letters as $letter )
                         @if($letter == $current_letter)
@@ -72,57 +69,7 @@
                     @endforeach
                 </ul>
             </nav>
-
-            <div class="table-container">
-                <table class="table is-bordered is-striped is-fullwidth">
-                    <thead>
-                        <th>Id</th>
-                        <th>Barcode</th>
-                        <th>Name</th>
-                        <th>Updated</th>
-                        <th>Amount</th>
-                        <th>
-                        </th>
-                    </thead>
-                    <tfoot>
-                        <td colspan="6">
-                            <div class="buttons is-right">
-                                <a class="button is-success" href="{{ route('lookup-homepage') }}">
-                                    <span class="icon">
-                                        <i class="las la-plus-circle la-lg"></i>
-                                    </span>
-                                    <span>Add Product</span>
-                                </a>
-                            </div>
-                        </td>
-                    </tfoot>
-                    <tbody>
-                        @foreach ($products as $product)
-                        <tr>
-                            <td>{{ $product->getId() }}</td>
-                            <td>{{ $product->getBarcode() }}</td>
-                            <td>{{ $product->getName() }}</td>
-                            <td>{{ $product->getUpdatedAt() }}</td>
-                            <td>{{ $product->getAmount() }}</td>
-                            <td>
-                                <div class="buttons is-centered">
-                                    <a class="button is-info" href="{{ route('product-detail', $product->getId()) }}">
-                                        <span class="icon">
-                                            <i class="las la-pen la-lg"></i>
-                                        </span>
-                                    </a>
-                                    <a class="button is-danger" href="{{ route('product-delete', $product->getId()) }}">
-                                        <span class="icon">
-                                            <i class="las la-trash la-lg"></i>
-                                        </span>
-                                    </a>
-                                </div>
-                            </td>
-                        </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-            </div>
+            @include('layouts.product.product_table', ['products' => $products])
         </div>
     </div>
 @endsection

@@ -29,19 +29,123 @@ use stdClass;
 
 class ProductController extends Controller
 {
+    public function findByIdAction(Request $request): ResponseView|Redirector
+    {
+        $param = $request->input('search-value');
+
+        if (!isset($param)) {
+            $msg = json_encode(['type' => Controller::WARNING,
+                'content' => 'Incorrect or missing search parameter supplied for the search.  Please try again.']);
+            $request->session()->flash('lookup_message', $msg);
+            return redirect(route('product-find-by-id-action'));
+        }
+
+        try {
+            $id = intval($param);
+
+            $store = new Datastore();
+            $products = $store->findProductsById($id);
+        }  catch (Exception $ex) {
+            Log::error('Failed to find products by id (' . $param . '): ' . $ex->getMessage());
+            $msg = json_encode(['type' => Controller::ERROR,
+                'content' => 'An error occurred while searching for products, see the log file for details.']);
+            $request->session()->flash('lookup_message', $msg);
+            return redirect(route('product-find-by-id-action'));
+        }
+
+        $msg = null;
+        if (count($products) == 0) {
+            $msg = new stdClass();
+            $msg->type = Controller::INFO;
+            $msg->content = 'Products found with the id: ' . $id;
+        }
+
+        return View::make('product.find', ['find_by_title' => 'Id', 'products' => $products, 'message' => $msg,
+            'action_url' => route('product-find-by-id-action' ), 'active_page' => 'product']);
+    }
+
+    public function findByBarcodeAction(Request $request): ResponseView|Redirector
+    {
+        $param = $request->input('search-value');
+
+        if (!isset($param)) {
+            $msg = json_encode(['type' => Controller::WARNING,
+                'content' => 'Incorrect or missing search parameter supplied for the search.  Please try again.']);
+            $request->session()->flash('lookup_message', $msg);
+            return redirect(route('product-find-by-barcode-action'));
+        }
+
+        try {
+            $store = new Datastore();
+            $products = $store->findProductsByBarcode($param);
+        }  catch (Exception $ex) {
+            Log::error('Failed to find products by barcode (' . $param . '): ' . $ex->getMessage());
+            $msg = json_encode(['type' => Controller::ERROR,
+                'content' => 'An error occurred while searching for products, see the log file for details.']);
+            $request->session()->flash('lookup_message', $msg);
+            return redirect(route('product-find-by-barcode-action'));
+        }
+
+        $msg = null;
+        if (count($products) == 0) {
+            $msg = new stdClass();
+            $msg->type = Controller::INFO;
+            $msg->content = 'Products found with the barcode: ' . $param;
+        }
+
+        return View::make('product.find', ['find_by_title' => 'Barcode', 'products' => $products, 'message' => $msg,
+            'action_url' => route('product-find-by-barcode-action'), 'active_page' => 'product']);
+    }
+
+    public function findByNameAction(Request $request): ResponseView|Redirector
+    {
+        $param = $request->input('search-value');
+
+        if (!isset($param)) {
+            $msg = json_encode(['type' => Controller::WARNING,
+                'content' => 'Incorrect or missing search parameter supplied for the search.  Please try again.']);
+            $request->session()->flash('lookup_message', $msg);
+            return redirect(route('product-find-by-name-action'));
+        }
+
+        try {
+            $store = new Datastore();
+            $products = $store->findProductsByName($param);
+        }  catch (Exception $ex) {
+            Log::error('Failed to find products by name (' . $param . '): ' . $ex->getMessage());
+            $msg = json_encode(['type' => Controller::ERROR,
+                'content' => 'An error occurred while searching for products, see the log file for details.']);
+            $request->session()->flash('lookup_message', $msg);
+            return redirect(route('product-find-by-name-action'));
+        }
+
+        $msg = null;
+        if (count($products) == 0) {
+            $msg = new stdClass();
+            $msg->type = Controller::INFO;
+            $msg->content = 'Products found with the name: ' . $param;
+        }
+
+        return View::make('product.find', ['find_by_title' => 'Name', 'products' => $products, 'message' => $msg,
+            'action_url' => route('product-find-by-name-action'), 'active_page' => 'product']);
+    }
+
     public function findById(): ResponseView
     {
-        return View::make('product.find');
+        return View::make('product.find', ['find_by_title' => 'Id', 'action_url' => route('product-find-by-id-action'),
+            'active_page' => 'product']);
     }
 
     public function findByBarcode(): ResponseView
     {
-        return View::make('product.find');
+        return View::make('product.find', ['find_by_title' => 'Barcode', 'action_url' => route('product-find-by-barcode-action'),
+            'active_page' => 'product']);
     }
 
     public function findByName(): ResponseView
     {
-        return View::make('product.find');
+        return View::make('product.find', ['find_by_title' => 'Name', 'action_url' => route('product-find-by-name-action'),
+            'active_page' => 'product']);
     }
 
     public function homePage(string $letter = null): ResponseView
