@@ -55,10 +55,10 @@
                     @foreach($letters as $letter )
                         @if($letter == $current_letter)
                             <li>
-                        <a class="pagination-link is-current" aria-label="Goto page A" href="{{ route('product-home', $letter) }}">
-                            {{ $letter }}
-                        </a>
-                    </li>
+                                <a class="pagination-link is-current" aria-label="Goto page A" href="{{ route('product-home', $letter) }}">
+                                    {{ $letter }}
+                                </a>
+                            </li>
                         @else
                             <li>
                                 <a class="pagination-link" aria-label="Goto page A" href="{{ route('product-home', $letter) }}">

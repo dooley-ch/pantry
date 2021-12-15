@@ -40,4 +40,15 @@ class DataOperationsTest extends TestCase
         $this->assertNotNull($id);
         $this->assertGreaterThan(0, $id);
     }
+
+    /**
+     * @test
+     */
+    public function get_full_product_is_valid()
+    {
+        $store = new Datastore();
+        $full = $store->getFullProduct(1);
+
+        $this->assertNotNull($full);
+    }
 }

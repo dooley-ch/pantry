@@ -5,6 +5,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProductLookupController;
 use App\Http\Controllers\ReportsController;
+use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -56,4 +57,10 @@ Route::group(['prefix' => '/user'], function () {
 
 Route::group(['prefix' => '/reports'], function () {
     Route::get('/', [ReportsController::class, 'homePage'])->name('reports-home');
+});
+
+Route::group(['prefix' => '/transactions'], function () {
+    Route::get('add/{id}', [TransactionController::class, 'add'])->name('transactions-add');
+    Route::get('remove/{id}', [TransactionController::class, 'remove'])->name('transactions-remove');
+    Route::get('clear/{id}', [TransactionController::class, 'clear'])->name('transactions-clear');
 });

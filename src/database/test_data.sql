@@ -72,43 +72,43 @@ INSERT INTO product_image (id, product_id) VALUES (9, 5);
 
 INSERT INTO xxx_product_image (action, record_id, product_id, lock_version) SELECT 'I', id, product_id, lock_version FROM product_image;
 
-INSERT INTO image (id, url, image_type, product_image_id) VALUES (1, 'https://bulma.io/images/placeholders/24x124.png', 'T', 1);
+INSERT INTO image (id, url, image_type, product_image_id) VALUES (1, 'https://bulma.io/images/placeholders/24x24.png', 'T', 1);
 INSERT INTO image (id, url, image_type, product_image_id) VALUES (2, 'https://bulma.io/images/placeholders/48x48.png', 'M', 1);
 INSERT INTO image (id, url, image_type, product_image_id) VALUES (3, 'https://bulma.io/images/placeholders/96x96.png', 'L', 1);
 INSERT INTO image (id, url, image_type, product_image_id) VALUES (4, 'https://bulma.io/images/placeholders/128x128.png', 'X', 1);
-INSERT INTO image (id, url, image_type, product_image_id) VALUES (5, 'https://bulma.io/images/placeholders/24x124.png', 'T', 2);
+INSERT INTO image (id, url, image_type, product_image_id) VALUES (5, 'https://bulma.io/images/placeholders/24x24.png', 'T', 2);
 INSERT INTO image (id, url, image_type, product_image_id) VALUES (6, 'https://bulma.io/images/placeholders/48x48.png', 'M', 2);
 INSERT INTO image (id, url, image_type, product_image_id) VALUES (7, 'https://bulma.io/images/placeholders/96x96.png', 'L', 2);
 INSERT INTO image (id, url, image_type, product_image_id) VALUES (8, 'https://bulma.io/images/placeholders/128x128.png', 'X', 2);
 
-INSERT INTO image (id, url, image_type, product_image_id) VALUES (9, 'https://bulma.io/images/placeholders/24x124.png', 'T', 3);
+INSERT INTO image (id, url, image_type, product_image_id) VALUES (9, 'https://bulma.io/images/placeholders/24x24.png', 'T', 3);
 INSERT INTO image (id, url, image_type, product_image_id) VALUES (10, 'https://bulma.io/images/placeholders/48x48.png', 'M', 3);
 INSERT INTO image (id, url, image_type, product_image_id) VALUES (11, 'https://bulma.io/images/placeholders/96x96.png', 'L', 3);
 INSERT INTO image (id, url, image_type, product_image_id) VALUES (12, 'https://bulma.io/images/placeholders/128x128.png', 'X', 3);
 
-INSERT INTO image (id, url, image_type, product_image_id) VALUES (13, 'https://bulma.io/images/placeholders/24x124.png', 'T', 4);
+INSERT INTO image (id, url, image_type, product_image_id) VALUES (13, 'https://bulma.io/images/placeholders/24x24.png', 'T', 4);
 INSERT INTO image (id, url, image_type, product_image_id) VALUES (14, 'https://bulma.io/images/placeholders/48x48.png', 'M', 4);
 INSERT INTO image (id, url, image_type, product_image_id) VALUES (15, 'https://bulma.io/images/placeholders/96x96.png', 'L', 4);
 INSERT INTO image (id, url, image_type, product_image_id) VALUES (16, 'https://bulma.io/images/placeholders/128x128.png', 'X', 4);
-INSERT INTO image (id, url, image_type, product_image_id) VALUES (17, 'https://bulma.io/images/placeholders/24x124.png', 'T', 5);
+INSERT INTO image (id, url, image_type, product_image_id) VALUES (17, 'https://bulma.io/images/placeholders/24x24.png', 'T', 5);
 INSERT INTO image (id, url, image_type, product_image_id) VALUES (18, 'https://bulma.io/images/placeholders/48x48.png', 'M', 5);
 INSERT INTO image (id, url, image_type, product_image_id) VALUES (19, 'https://bulma.io/images/placeholders/96x96.png', 'L', 5);
 INSERT INTO image (id, url, image_type, product_image_id) VALUES (20, 'https://bulma.io/images/placeholders/128x128.png', 'X', 5);
-INSERT INTO image (id, url, image_type, product_image_id) VALUES (21, 'https://bulma.io/images/placeholders/24x124.png', 'T', 6);
+INSERT INTO image (id, url, image_type, product_image_id) VALUES (21, 'https://bulma.io/images/placeholders/24x24.png', 'T', 6);
 INSERT INTO image (id, url, image_type, product_image_id) VALUES (22, 'https://bulma.io/images/placeholders/48x48.png', 'M', 6);
 INSERT INTO image (id, url, image_type, product_image_id) VALUES (23, 'https://bulma.io/images/placeholders/96x96.png', 'L', 6);
 INSERT INTO image (id, url, image_type, product_image_id) VALUES (24, 'https://bulma.io/images/placeholders/128x128.png', 'X', 6);
 
-INSERT INTO image (id, url, image_type, product_image_id) VALUES (25, 'https://bulma.io/images/placeholders/24x124.png', 'T', 7);
+INSERT INTO image (id, url, image_type, product_image_id) VALUES (25, 'https://bulma.io/images/placeholders/24x24.png', 'T', 7);
 INSERT INTO image (id, url, image_type, product_image_id) VALUES (26, 'https://bulma.io/images/placeholders/48x48.png', 'M', 7);
 INSERT INTO image (id, url, image_type, product_image_id) VALUES (27, 'https://bulma.io/images/placeholders/96x96.png', 'L', 7);
 INSERT INTO image (id, url, image_type, product_image_id) VALUES (28, 'https://bulma.io/images/placeholders/128x128.png', 'X', 7);
-INSERT INTO image (id, url, image_type, product_image_id) VALUES (29, 'https://bulma.io/images/placeholders/24x124.png', 'T', 8);
+INSERT INTO image (id, url, image_type, product_image_id) VALUES (29, 'https://bulma.io/images/placeholders/24x24.png', 'T', 8);
 INSERT INTO image (id, url, image_type, product_image_id) VALUES (30, 'https://bulma.io/images/placeholders/48x48.png', 'M', 8);
 INSERT INTO image (id, url, image_type, product_image_id) VALUES (31, 'https://bulma.io/images/placeholders/96x96.png', 'L', 8);
 INSERT INTO image (id, url, image_type, product_image_id) VALUES (32, 'https://bulma.io/images/placeholders/128x128.png', 'X', 8);
 
-INSERT INTO image (id, url, image_type, product_image_id) VALUES (33, 'https://bulma.io/images/placeholders/24x124.png', 'T', 9);
+INSERT INTO image (id, url, image_type, product_image_id) VALUES (33, 'https://bulma.io/images/placeholders/24x24.png', 'T', 9);
 INSERT INTO image (id, url, image_type, product_image_id) VALUES (34, 'https://bulma.io/images/placeholders/48x48.png', 'M', 9);
 INSERT INTO image (id, url, image_type, product_image_id) VALUES (35, 'https://bulma.io/images/placeholders/96x96.png', 'L', 9);
 INSERT INTO image (id, url, image_type, product_image_id) VALUES (36, 'https://bulma.io/images/placeholders/128x128.png', 'X', 9);

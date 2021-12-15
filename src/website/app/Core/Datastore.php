@@ -20,8 +20,11 @@ namespace App\Core;
 use App\Models\OpenFoodProduct;
 use App\Models\Product;
 use App\Models\ProductExtended;
+use App\Models\ProductFull;
 use App\Models\ProductImage;
+use App\Models\ProductImageExtended;
 use App\Models\StockSummary;
+use App\Models\StockSummaryExtended;
 use App\Models\StockTransaction;
 use App\Models\Version;
 use App\Models\Image;
@@ -30,6 +33,7 @@ use App\Models\XxxProduct;
 use App\Models\XxxProductImage;
 use App\Models\XxxStockSummary;
 
+use Carbon\Carbon;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -831,7 +835,7 @@ class Datastore
         $records = DB::table('stock_transaction')->where('stock_summary_id', $stock_summary_id)->get();
 
         foreach ($records as $record) {
-            $list []= ProductImage::fromRecord($record);
+            $list []= StockTransaction::fromRecord($record);
         }
 
         return $list;
@@ -935,6 +939,46 @@ class Datastore
     //endregion
 
     //region Operations
+
+    public function getFullProduct($id): ?ProductFull
+    {
+        // Product
+        $product = $this->getProduct($id);
+
+        if (empty($product))
+            return null;
+
+        $product_full = new ProductFull($product->getId(), $product->getLockVersion(), $product->getCreatedAt(), $product->getUpdatedAt(),
+                                        $product->getBarcode(), $product->getName(), $product->getDescription());
+
+        // Summary
+        $summary = $this->getStockSummaryByProduct($id);
+        $summary_ex = new StockSummaryExtended($summary->getId(), $summary->getLockVersion(), $summary->getCreatedAt(),
+            $summary->getCreatedAt(), $summary->getAmount(), $summary->getProductId());
+        $product_full->setStockSummary($summary_ex);
+
+        // Transactions
+        $transactions = $this->getStockTransactionsBySummary($summary->getId());
+        $summary_ex->setTransactions($transactions);
+
+        // Product Images
+        $list = [];
+        $product_images = $this->getProductImages($id);
+        foreach ($product_images as $product_image) {
+            $list []= new ProductImageExtended($product_image->getId(), $product_image->getLockVersion(),
+                $product_image->getCreatedAt(), $product_image->getUpdatedAt(), $product_image->getProductId());
+        }
+
+        $product_full->setProductImages($list);
+
+        // Images
+        foreach ($list as $product_image) {
+            $images = $this->getImages($product_image->getId());
+            $product_image->setImages($images);
+        }
+
+        return $product_full;
+    }
 
     public function addProduct(OpenFoodProduct $open_product): int|null
     {

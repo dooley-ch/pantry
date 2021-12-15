@@ -19,7 +19,6 @@ use App\Core\Datastore;
 use App\Core\OpenFoodRepoLookup;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Illuminate\Routing\Redirector;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\View;
@@ -174,9 +173,30 @@ class ProductController extends Controller
                 'logged_in' => false, 'message' => null]);
     }
 
-    public function details(Request $request, int $id): ResponseView
+    public function details(int $id): ResponseView
     {
-        return View::make('product.detail', ['active_page' => 'product', 'logged_in' => false]);
+        $msg = null;
+        $product = null;
+        $store = new Datastore();
+
+        try {
+            $product = $store->getFullProduct($id);
+
+            if (empty($product)) {
+                $msg = new stdClass();
+                $msg->type = Controller::WARNING;
+                $msg->content = 'Product not found (' . $id . ')';
+            }
+        } catch (Exception $ex) {
+            Log::error('An error occurred while loading the product details (' . $id . '): ' . $ex->getMessage());
+
+            $msg = new stdClass();
+            $msg->type = Controller::ERROR;
+            $msg->content = 'An error occurred while loading the product details.  See the log file for details.';
+        }
+
+        return View::make('product.detail', ['product' => $product, 'active_page' => 'product',
+            'logged_in' => false, 'message' => $msg]);
     }
 
     public function add(Request $request, string $barcode): RedirectResponse|ResponseView
@@ -230,6 +250,7 @@ class ProductController extends Controller
 
     public function remove(Request $request, int $id): ResponseView
     {
+
         return View::make('product.home', ['products' => [], 'active_page' => 'product', 'logged_in' => false]);
     }
 
