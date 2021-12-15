@@ -31,7 +31,7 @@ class ProductLookupController extends Controller
 {
     public function homePage(Request $request): ResponseView
     {
-        $msg = $request->session()->get('lookup_message');
+        $msg = $request->session()->get('flash_message');
 
         if (isset($msg)) {
             $msg = json_decode($msg);
@@ -52,7 +52,7 @@ class ProductLookupController extends Controller
         if (!isset($type) or !isset($search_value)) {
             $msg = json_encode(['type' => Controller::WARNING,
                 'content' => 'Incorrect or missing parameters supplied for the search.  Please try again.']);
-            $request->session()->flash('lookup_message', $msg);
+            $request->session()->flash('flash_message', $msg);
             return redirect(route('lookup-homepage'));
         }
 
@@ -66,7 +66,7 @@ class ProductLookupController extends Controller
             Log::error('Failed to lookup product (' . $search_value . '): ' . $ex->getMessage());
             $msg = json_encode(['type' => Controller::ERROR,
                 'content' => 'An error occurred while looking up the product, see the log file for details.']);
-            $request->session()->flash('lookup_message', $msg);
+            $request->session()->flash('flash_message', $msg);
             return redirect(route('lookup-homepage'));
         }
 
@@ -77,7 +77,7 @@ class ProductLookupController extends Controller
 
             $msg = json_encode(['type' => Controller::INFO,
                 'content' => 'There is no product on the Open Food Repo website with the provided ' . $search_type . '.']);
-            $request->session()->flash('lookup_message', $msg);
+            $request->session()->flash('flash_message', $msg);
             return redirect(route('lookup-homepage'));
         }
 

@@ -405,9 +405,47 @@ class Datastore
      */
     public function deleteProduct(Product $product): bool
     {
+        $summary = $this->getStockSummaryByProduct($product->getId());
+        $product_images = $this->getProductImages($product->getId());
+
         DB::beginTransaction();
 
         try {
+            // Delete related records
+            if ($summary) {
+                DB::statement('DELETE FROM stock_transaction WHERE (stock_summary_id = ?)', [$summary->getId()]);
+
+                DB::statement("INSERT INTO xxx_stock_summary (action, record_id, amount, product_id, lock_version)
+                                    SELECT 'D', id, amount, product_id, lock_version FROM stock_summary
+                                    WHERE (id = ?);", [$summary->getId()]);
+
+                DB::table('stock_summary')->where('id', $summary->getId())->where('lock_version',
+                    $summary->getLockVersion())->delete();
+            }
+
+            foreach ($product_images as $product_image) {
+                // Delete images
+                $images = $this->getImages($product_image->getId());
+
+                foreach($images as $image) {
+                    DB::statement("INSERT INTO xxx_image (action, record_id, url, image_type, product_image_id, lock_version)
+                                    SELECT 'D', id, url, image_type, product_image_id, lock_version FROM image
+                                    WHERE (id = ?);", [$image->getId()]);
+
+                    DB::table('image')->where('id', $image->getId())->where('lock_version',
+                        $image->getLockVersion())->delete();
+                }
+
+                // Delete product image
+                DB::statement("INSERT INTO xxx_product_image (action, record_id, product_id, lock_version)
+                                    SELECT 'D', id, product_id, lock_version FROM product_image
+                                    WHERE (id = ?);", [$product_image->getId()]);
+
+                DB::table('product_image')->where('id', $product_image->getId())->where('lock_version',
+                    $product_image->getLockVersion())->delete();
+            }
+
+            // Delete the product record
             DB::statement("INSERT INTO xxx_product (action, record_id, barcode, name, description, lock_version)
                     SELECT 'D', id, barcode, name, description, lock_version FROM product WHERE (id = ?);", [$product->getId()]);
 
@@ -915,6 +953,34 @@ class Datastore
 
             DB::statement("INSERT INTO xxx_stock_summary (action, record_id, amount, product_id, lock_version)
                                     SELECT 'I', id, amount, product_id, lock_version FROM stock_summary WHERE (id = ?);", [$id]);
+
+            // Insert images
+            foreach ($open_product->getImages() as $image) {
+                $product_image_id = DB::table('product_image')->insertGetId(['product_id' => $product_id]);
+
+                DB::statement("INSERT INTO xxx_product_image (action, record_id, product_id, lock_version)
+                                    SELECT 'I', id, product_id, lock_version FROM product_image WHERE (id = ?);", [$product_image_id]);
+
+                $id = DB::table('image')->insertGetId(['url' => $image->getThumb(), 'image_type' => 'T',
+                    'product_image_id' => $product_image_id]);
+                DB::statement("INSERT INTO xxx_image (action, record_id, url, image_type, product_image_id, lock_version)
+                    SELECT 'I', id, url, image_type, product_image_id, lock_version FROM image WHERE (id = ?);", [$id]);
+
+                $id = DB::table('image')->insertGetId(['url' => $image->getMedium(), 'image_type' => 'M',
+                    'product_image_id' => $product_image_id]);
+                DB::statement("INSERT INTO xxx_image (action, record_id, url, image_type, product_image_id, lock_version)
+                    SELECT 'I', id, url, image_type, product_image_id, lock_version FROM image WHERE (id = ?);", [$id]);
+
+                $id = DB::table('image')->insertGetId(['url' => $image->getLarge(), 'image_type' => 'L',
+                    'product_image_id' => $product_image_id]);
+                DB::statement("INSERT INTO xxx_image (action, record_id, url, image_type, product_image_id, lock_version)
+                    SELECT 'I', id, url, image_type, product_image_id, lock_version FROM image WHERE (id = ?);", [$id]);
+
+                $id = DB::table('image')->insertGetId(['url' => $image->getXlarge(), 'image_type' => 'X',
+                    'product_image_id' => $product_image_id]);
+                DB::statement("INSERT INTO xxx_image (action, record_id, url, image_type, product_image_id, lock_version)
+                    SELECT 'I', id, url, image_type, product_image_id, lock_version FROM image WHERE (id = ?);", [$id]);
+            }
 
             DB::commit();
 

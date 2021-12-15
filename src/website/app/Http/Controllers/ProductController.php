@@ -29,6 +29,8 @@ use stdClass;
 
 class ProductController extends Controller
 {
+    //region Find
+
     public function findByIdAction(Request $request): ResponseView|Redirector
     {
         $param = $request->input('search-value');
@@ -36,7 +38,7 @@ class ProductController extends Controller
         if (!isset($param)) {
             $msg = json_encode(['type' => Controller::WARNING,
                 'content' => 'Incorrect or missing search parameter supplied for the search.  Please try again.']);
-            $request->session()->flash('lookup_message', $msg);
+            $request->session()->flash('flash_message', $msg);
             return redirect(route('product-find-by-id-action'));
         }
 
@@ -49,7 +51,7 @@ class ProductController extends Controller
             Log::error('Failed to find products by id (' . $param . '): ' . $ex->getMessage());
             $msg = json_encode(['type' => Controller::ERROR,
                 'content' => 'An error occurred while searching for products, see the log file for details.']);
-            $request->session()->flash('lookup_message', $msg);
+            $request->session()->flash('flash_message', $msg);
             return redirect(route('product-find-by-id-action'));
         }
 
@@ -71,7 +73,7 @@ class ProductController extends Controller
         if (!isset($param)) {
             $msg = json_encode(['type' => Controller::WARNING,
                 'content' => 'Incorrect or missing search parameter supplied for the search.  Please try again.']);
-            $request->session()->flash('lookup_message', $msg);
+            $request->session()->flash('flash_message', $msg);
             return redirect(route('product-find-by-barcode-action'));
         }
 
@@ -82,7 +84,7 @@ class ProductController extends Controller
             Log::error('Failed to find products by barcode (' . $param . '): ' . $ex->getMessage());
             $msg = json_encode(['type' => Controller::ERROR,
                 'content' => 'An error occurred while searching for products, see the log file for details.']);
-            $request->session()->flash('lookup_message', $msg);
+            $request->session()->flash('flash_message', $msg);
             return redirect(route('product-find-by-barcode-action'));
         }
 
@@ -104,7 +106,7 @@ class ProductController extends Controller
         if (!isset($param)) {
             $msg = json_encode(['type' => Controller::WARNING,
                 'content' => 'Incorrect or missing search parameter supplied for the search.  Please try again.']);
-            $request->session()->flash('lookup_message', $msg);
+            $request->session()->flash('flash_message', $msg);
             return redirect(route('product-find-by-name-action'));
         }
 
@@ -115,7 +117,7 @@ class ProductController extends Controller
             Log::error('Failed to find products by name (' . $param . '): ' . $ex->getMessage());
             $msg = json_encode(['type' => Controller::ERROR,
                 'content' => 'An error occurred while searching for products, see the log file for details.']);
-            $request->session()->flash('lookup_message', $msg);
+            $request->session()->flash('flash_message', $msg);
             return redirect(route('product-find-by-name-action'));
         }
 
@@ -148,6 +150,8 @@ class ProductController extends Controller
             'active_page' => 'product']);
     }
 
+    //endregion
+
     public function homePage(string $letter = null): ResponseView
     {
         $store = new Datastore();
@@ -170,12 +174,12 @@ class ProductController extends Controller
                 'logged_in' => false, 'message' => null]);
     }
 
-    public function details(Request $request, string $barcode): ResponseView
+    public function details(Request $request, int $id): ResponseView
     {
         return View::make('product.detail', ['active_page' => 'product', 'logged_in' => false]);
     }
 
-    public function add(Request $request, string $barcode): RedirectResponse|Redirector|Response|ResponseView
+    public function add(Request $request, string $barcode): RedirectResponse|ResponseView
     {
         // Look up the product details
         $lookup = new OpenFoodRepoLookup();
@@ -186,7 +190,7 @@ class ProductController extends Controller
             Log::error('Failed to lookup product (' . $barcode . '): ' . $ex->getMessage());
             $msg = json_encode(['type' => Controller::ERROR,
                 'content' => 'An error occurred while looking up the product, see the log file for details.']);
-            $request->session()->flash('lookup_message', $msg);
+            $request->session()->flash('flash_message', $msg);
             return redirect(route('lookup-homepage'));
         }
 
@@ -200,14 +204,14 @@ class ProductController extends Controller
                 Log::error('Failed to add product to the database (' . $barcode . ')');
                 $msg = json_encode(['type' => Controller::ERROR,
                     'content' => 'An error occurred while adding the product to the database, see the log file for details.']);
-                $request->session()->flash('lookup_message', $msg);
+                $request->session()->flash('flash_message', $msg);
                 return redirect(route('lookup-homepage'));
             }
         } catch (Exception $ex) {
             Log::error('Failed to add product to the database (' . $barcode . '): ' . $ex->getMessage());
             $msg = json_encode(['type' => Controller::ERROR,
                 'content' => 'An error occurred while adding the product to the database, see the log file for details.']);
-            $request->session()->flash('lookup_message', $msg);
+            $request->session()->flash('flash_message', $msg);
             return redirect(route('lookup-homepage'));
         }
 
@@ -224,13 +228,37 @@ class ProductController extends Controller
             'active_page' => 'product', 'logged_in' => false, 'message' => $msg]);
     }
 
-    public function remove(Request $request, string $barcode): ResponseView
+    public function remove(Request $request, int $id): ResponseView
     {
         return View::make('product.home', ['products' => [], 'active_page' => 'product', 'logged_in' => false]);
     }
 
-    public function delete(Request $request, string $barcode): ResponseView
+    public function delete(Request $request, int $id): RedirectResponse
     {
-        return View::make('product.home', ['products' => [], 'active_page' => 'product', 'logged_in' => false]);
+        $msg = null;
+        $store = new Datastore();
+
+        // Delete the product
+        try {
+            $product = $store->getProduct($id);
+
+            if ($product) {
+                if (!$store->deleteProduct($product))
+                    $msg = json_encode(['type' => Controller::WARNING, 'content' => 'Product not deleted (' . $id . '), see log for details.']);
+            } else {
+                $msg = json_encode(['type' => Controller::WARNING, 'content' => 'Product not found in database (' . $id . ')']);
+            }
+        } catch (Exception $ex) {
+            Log::error('Failed to delete product (' . $id . '): ' . $ex->getMessage());
+            $msg = json_encode(['type' => Controller::ERROR,
+                'content' => 'An error occurred while deleting a product, see the log file for details.']);
+        }
+
+        if (!isset($msg)) {
+            $msg = json_encode(['type' => Controller::SUCCESS, 'content' => 'Product deleted successfully: ' . $id]);
+        }
+
+        $request->session()->flash('flash_message', $msg);
+        return redirect(route('product-home'));
     }
 }
