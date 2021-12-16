@@ -173,9 +173,14 @@ class ProductController extends Controller
                 'logged_in' => false, 'message' => null]);
     }
 
-    public function details(int $id): ResponseView
+    public function details(Request $request, int $id): ResponseView
     {
-        $msg = null;
+        $msg = $request->session()->get('flash_message');
+
+        if (isset($msg)) {
+            $msg = json_decode($msg);
+        }
+
         $product = null;
         $store = new Datastore();
 
@@ -189,7 +194,6 @@ class ProductController extends Controller
             }
         } catch (Exception $ex) {
             Log::error('An error occurred while loading the product details (' . $id . '): ' . $ex->getMessage());
-
             $msg = new stdClass();
             $msg->type = Controller::ERROR;
             $msg->content = 'An error occurred while loading the product details.  See the log file for details.';

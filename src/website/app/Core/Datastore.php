@@ -1035,5 +1035,73 @@ class Datastore
         return null;
     }
 
+    public function alterProductItems(int $product_id, string $operation): bool
+    {
+        $summary = $this->getStockSummaryByProduct($product_id);
+        $balance = $summary->getAmount();
+
+        if ($operation == 'A') {
+            $balance += 1;
+        } else {
+            $balance -= 1;
+        }
+
+        DB::beginTransaction();
+
+        try {
+            // Insert the transaction
+            DB::table('stock_transaction')->insertGetId(
+                ['operation' => $operation, 'amount' => 1, 'stock_summary_id' => $summary->getId()]);
+
+            // Update summary
+            DB::table('stock_summary')->where('id', $summary->getId())->where('lock_version',
+                $summary->getLockVersion())->update(['amount' => $balance, 'product_id' => $summary->getProductId(),
+                'lock_version' => ($summary->getLockVersion() + 1)]);
+
+            DB::statement("INSERT INTO xxx_stock_summary (action, record_id, amount, product_id, lock_version)
+                                    SELECT 'U', id, amount, product_id, lock_version FROM stock_summary
+                                    WHERE (id = ?);", [$summary->getId()]);
+
+            DB::commit();
+
+            return true;
+        } catch (QueryException $e) {
+            DB::rollBack();
+            Log::error('Failed to add product item (' . $product_id . '): ' . $e->getMessage());
+        }
+
+        return false;
+    }
+
+    public function clearProductItems(int $product_id): bool
+    {
+        $summary = $this->getStockSummaryByProduct($product_id);
+
+        DB::beginTransaction();
+
+        try {
+            // Delete the transactions
+            DB::table('stock_transaction')->where('stock_summary_id', $summary->getId())->delete();
+
+            // Update summary
+            DB::table('stock_summary')->where('id', $summary->getId())->where('lock_version',
+                $summary->getLockVersion())->update(['amount' => 0, 'product_id' => $summary->getProductId(),
+                'lock_version' => ($summary->getLockVersion() + 1)]);
+
+            DB::statement("INSERT INTO xxx_stock_summary (action, record_id, amount, product_id, lock_version)
+                                    SELECT 'U', id, amount, product_id, lock_version FROM stock_summary
+                                    WHERE (id = ?);", [$summary->getId()]);
+
+            DB::commit();
+
+            return true;
+        } catch (QueryException $e) {
+            DB::rollBack();
+            Log::error('Failed to clear product items (' . $product_id . '): ' . $e->getMessage());
+        }
+
+        return false;
+    }
+
     //endregion
 }
