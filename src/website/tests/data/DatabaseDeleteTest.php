@@ -31,7 +31,7 @@ class DatabaseDeleteTest extends TestCase
     public function delete_stock_transaction_stock_summary_product_is_valid()
     {
         $store = new Datastore();
-        $product = Product::asNew('01234566005', 'Product 6005', 'Product 6005 Notes');
+        $product = Product::asNew('7878', '01234566005', 'Product 6005', 'Product 6005 Notes');
         $product = $store->insertProduct($product);
         $this->assertNotNull($product);
 
@@ -59,7 +59,7 @@ class DatabaseDeleteTest extends TestCase
     public function insert_image_is_valid()
     {
         $store = new Datastore();
-        $product = Product::asNew('01234566001', 'Product 6001', 'Product 6001 Notes');
+        $product = Product::asNew('9876','01234566001', 'Product 6001', 'Product 6001 Notes');
         $product = $store->insertProduct($product);
         $this->assertNotNull($product);
 

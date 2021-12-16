@@ -23,9 +23,9 @@ class ProductFull extends Product
     private array $product_images;
 
     public function __construct(int $id, int $lock_version, Carbon $created_at, Carbon $updated_at,
-                                string $barcode, string $name, private string $description)
+                                string $code, string $barcode, string $name, private string $description)
     {
-        parent::__construct($id, $lock_version, $created_at, $updated_at, $barcode, $name, $this->description);
+        parent::__construct($id, $lock_version, $created_at, $updated_at, $code, $barcode, $name, $this->description);
     }
 
     public function getStockSummary(): StockSummaryExtended

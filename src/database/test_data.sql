@@ -12,11 +12,11 @@
 
 USE pantry;
 
-INSERT INTO product (id, barcode, name, description) VALUES (1, '01234567891', 'Product 1', 'Product 1 Notes');
-INSERT INTO product (id, barcode, name, description) VALUES (2, '01234567892', 'Product 2', 'Product 2 Notes');
-INSERT INTO product (id, barcode, name, description) VALUES (3, '01234567893', 'Product 3', 'Product 3 Notes');
-INSERT INTO product (id, barcode, name, description) VALUES (4, '01234567894', 'Product 4', 'Product 4 Notes');
-INSERT INTO product (id, barcode, name, description) VALUES (5, '01234567895', 'Product 5', 'Product 5 Notes');
+INSERT INTO product (id, code, barcode, name, description) VALUES (1, 1567, '01234567891', 'Product 1', 'Product 1 Notes');
+INSERT INTO product (id, code, barcode, name, description) VALUES (2, 1545, '01234567892', 'Product 2', 'Product 2 Notes');
+INSERT INTO product (id, code, barcode, name, description) VALUES (3, 1537, '01234567893', 'Product 3', 'Product 3 Notes');
+INSERT INTO product (id, code, barcode, name, description) VALUES (4, 1601, '01234567894', 'Product 4', 'Product 4 Notes');
+INSERT INTO product (id, code, barcode, name, description) VALUES (5, 1457, '01234567895', 'Product 5', 'Product 5 Notes');
 
 INSERT INTO xxx_product (action, record_id, barcode, name, description, lock_version)
     SELECT 'I', id, barcode, name, description, lock_version FROM product;

@@ -32,8 +32,6 @@ use App\Models\XxxImage;
 use App\Models\XxxProduct;
 use App\Models\XxxProductImage;
 use App\Models\XxxStockSummary;
-
-use Carbon\Carbon;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -246,7 +244,7 @@ class Datastore
         $records = [];
 
         try {
-            $rows = DB::select("SELECT p.id, p.barcode, p.name, p.description, p.lock_version, p.created_at,
+            $rows = DB::select("SELECT p.id, p.code, p.barcode, p.name, p.description, p.lock_version, p.created_at,
                                         p.updated_at, s.amount  FROM product AS p INNER JOIN stock_summary AS s ON (p.id = s.product_id)
                                         WHERE (p.id = ?);", [$id]);
 
@@ -265,7 +263,7 @@ class Datastore
         $records = [];
 
         try {
-            $rows = DB::select("SELECT p.id, p.barcode, p.name, p.description, p.lock_version, p.created_at,
+            $rows = DB::select("SELECT p.id, p.code, p.barcode, p.name, p.description, p.lock_version, p.created_at,
                                         p.updated_at, s.amount  FROM product AS p INNER JOIN stock_summary AS s ON (p.id = s.product_id)
                                         WHERE (p.barcode = ?);", [$barcode]);
 
@@ -285,7 +283,7 @@ class Datastore
         $name = '%' . $name . '%';
 
         try {
-            $rows = DB::select("SELECT p.id, p.barcode, p.name, p.description, p.lock_version, p.created_at,
+            $rows = DB::select("SELECT p.id, p.code, p.barcode, p.name, p.description, p.lock_version, p.created_at,
                                         p.updated_at, s.amount  FROM product AS p INNER JOIN stock_summary AS s ON (p.id = s.product_id)
                                         WHERE (p.name LIKE ?);", [$name]);
 
@@ -305,7 +303,7 @@ class Datastore
         $letter = $letter . '%';
 
         try {
-            $rows = DB::select("SELECT p.id, p.barcode, p.name, p.description, p.lock_version, p.created_at,
+            $rows = DB::select("SELECT p.id, p.code, p.barcode, p.name, p.description, p.lock_version, p.created_at,
                                         p.updated_at, s.amount  FROM product AS p INNER JOIN stock_summary AS s ON (p.id = s.product_id)
                                         WHERE (UPPER(p.name) LIKE ?);", [$letter]);
 
@@ -348,11 +346,11 @@ class Datastore
         DB::beginTransaction();
 
         try {
-            $id = DB::table('product')->insertGetId(['barcode' => $product->getBarcode(),
+            $id = DB::table('product')->insertGetId(['code' => $product->getCode(), 'barcode' => $product->getBarcode(),
                 'name' => $product->getName(), 'description' => $product->getDescription()]);
 
-            DB::statement("INSERT INTO xxx_product (action, record_id, barcode, name, description, lock_version)
-                    SELECT 'I', id, barcode, name, description, lock_version FROM product WHERE (id = ?);", [$id]);
+            DB::statement("INSERT INTO xxx_product (action, record_id, code, barcode, name, description, lock_version)
+                    SELECT 'I', id, code, barcode, name, description, lock_version FROM product WHERE (id = ?);", [$id]);
 
             DB::commit();
 
@@ -949,7 +947,7 @@ class Datastore
             return null;
 
         $product_full = new ProductFull($product->getId(), $product->getLockVersion(), $product->getCreatedAt(), $product->getUpdatedAt(),
-                                        $product->getBarcode(), $product->getName(), $product->getDescription());
+                                        $product->getCode(), $product->getBarcode(), $product->getName(), $product->getDescription());
 
         // Summary
         $summary = $this->getStockSummaryByProduct($id);
@@ -986,7 +984,7 @@ class Datastore
 
         try {
             // Insert Product
-            $product_id = DB::table('product')->insertGetId(['barcode' => $open_product->getBarcode(),
+            $product_id = DB::table('product')->insertGetId(['code' => $open_product->getId(), 'barcode' => $open_product->getBarcode(),
                 'name' => $open_product->getName(), 'description' => '']);
 
             DB::statement("INSERT INTO xxx_product (action, record_id, barcode, name, description, lock_version)

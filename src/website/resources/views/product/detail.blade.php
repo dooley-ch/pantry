@@ -32,6 +32,7 @@
     $transactions = [];
     $final_balance = 0;
     $summary_id = 0;
+    $product_code = 0;
 
     if ($product) {
         // Get the thumb image links
@@ -60,6 +61,7 @@
                 $item->out = strval($transaction->getAmount());
             }
 
+
             $item->balance = strval($final_balance);
 
             $transactions []= $item;
@@ -67,6 +69,9 @@
 
         // Summary ID
         $summary_id = $product->getStockSummary()->getId();
+
+        // Code
+        $product_code = $product->getCode();
     }
 
 @endphp
@@ -178,25 +183,45 @@
                     </div>
 
                     <!-- Buttons -->
-                    <div class="buttons is-right">
-                        <a class="button is-success" href="{{ route('transactions-add', $summary_id) }}">
-                            <span class="icon">
-                                <i class="las la-plus-circle la-lg"></i>
-                            </span>
-                            <span>Add</span>
-                        </a>
-                        <a class="button is-warning" href="{{ route('transactions-remove', $summary_id) }}">
-                            <span class="icon">
-                                <i class="las la-minus-circle la-lg"></i>
-                            </span>
-                            <span>Remove</span>
-                        </a>
-                        <a class="button is-danger" href="{{ route('transactions-clear', $summary_id) }}">
-                            <span class="icon">
-                                <i class="las la-trash-alt la-lg"></i>
-                            </span>
-                            <span>Clear</span>
-                        </a>
+                    <div class="columns">
+                        <div class="column">
+                            <div class="buttons is-left">
+                                <a class="button is-info" href="https://www.foodrepo.org/en/products/{{ $product_code }}" target="_blank">
+                                    <span class="icon">
+                                        <i class="las la-info la-lg"></i>
+                                    </span>
+                                    <span>Website</span>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="column">
+                            <div class="buttons is-right">
+                                <a class="button is-success" href="{{ route('transactions-add', $summary_id) }}">
+                                    <span class="icon">
+                                        <i class="las la-plus-circle la-lg"></i>
+                                    </span>
+                                    <span>Add</span>
+                                </a>
+
+                                @if ($final_balance > 0)
+                                <a class="button is-warning" href="{{ route('transactions-remove', $summary_id) }}">
+                                    <span class="icon">
+                                        <i class="las la-minus-circle la-lg"></i>
+                                    </span>
+                                    <span>Remove</span>
+                                </a>
+                                @endif
+
+                                @if (count($transactions) > 0)
+                                <a class="button is-danger" href="{{ route('transactions-clear', $summary_id) }}">
+                                    <span class="icon">
+                                        <i class="las la-trash-alt la-lg"></i>
+                                    </span>
+                                    <span>Clear</span>
+                                </a>
+                                @endif
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -204,7 +229,7 @@
                     @foreach($thumb_images as $url)
                     <p class="pb-2">
                         <figure class="image is-96x96">
-                            <img src="{{ $url  }}">
+                            <img src="{{ $url  }}" alt="Product Image">
                         </figure>
                     </p>
                     @endforeach

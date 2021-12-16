@@ -115,7 +115,7 @@ class DatastoreSelectTest extends TestCase
         $store = new Datastore();
         $list = $store->getProductLetters();
 
-        $this->assertGreaterThanOrEqual(5, count($list));
+        $this->assertGreaterThanOrEqual(2, count($list));
     }
 
     //endregion

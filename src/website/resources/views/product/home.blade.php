@@ -32,7 +32,9 @@
 @section('content')
     <h1 class="title pt-2">Product</h1>
 
-    <div class="columns">
+    <img src="/img/product.png">
+
+    <div class="columns pt-3">
         <div class="column is-2">
             @include('layouts.product.menu')
         </div>

@@ -31,7 +31,7 @@ class DatastoreUpdateTest extends TestCase
     public function update_product_is_valid()
     {
         $store = new Datastore();
-        $product = Product::asNew('01234568001', 'Product 8001', 'Product 8001 Notes');
+        $product = Product::asNew('1890', '01234568001', 'Product 8001', 'Product 8001 Notes');
 
         $product = $store->insertProduct($product);
         $this->assertNotNull($product);
@@ -50,7 +50,7 @@ class DatastoreUpdateTest extends TestCase
     public function update_stock_summary_is_valid()
     {
         $store = new Datastore();
-        $product = Product::asNew('01234568005', 'Product 8005', 'Product 8005 Notes');
+        $product = Product::asNew('2346', '01234568005', 'Product 8005', 'Product 8005 Notes');
         $product = $store->insertProduct($product);
         $this->assertNotNull($product);
 
@@ -71,7 +71,7 @@ class DatastoreUpdateTest extends TestCase
     public function update_stock_transaction_is_valid()
     {
         $store = new Datastore();
-        $product = Product::asNew('01234568010', 'Product 8010', 'Product 8010 Notes');
+        $product = Product::asNew('1678', '01234568010', 'Product 8010', 'Product 8010 Notes');
         $product = $store->insertProduct($product);
         $this->assertNotNull($product);
 
@@ -95,7 +95,7 @@ class DatastoreUpdateTest extends TestCase
     public function update_product_image_is_valid()
     {
         $store = new Datastore();
-        $product = Product::asNew('01234568015', 'Product 8015', 'Product 8015 Notes');
+        $product = Product::asNew('1256', '01234568015', 'Product 8015', 'Product 8015 Notes');
         $product = $store->insertProduct($product);
         $this->assertNotNull($product);
 
@@ -116,7 +116,7 @@ class DatastoreUpdateTest extends TestCase
     public function update_image_is_valid()
     {
         $store = new Datastore();
-        $product = Product::asNew('01234568020', 'Product 8020', 'Product 8020 Notes');
+        $product = Product::asNew('1567', '01234568020', 'Product 8020', 'Product 8020 Notes');
         $product = $store->insertProduct($product);
         $this->assertNotNull($product);
 

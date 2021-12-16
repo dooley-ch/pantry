@@ -30,7 +30,7 @@ use Carbon\Carbon;
 class Product extends Record
 {
     public function __construct(int $id, int $lock_version, Carbon $created_at, Carbon $updated_at,
-                                private string $barcode, private string $name, private string $description)
+                                private string $code, private string $barcode, private string $name, private string $description)
     {
         parent::__construct($id, $lock_version, $created_at, $updated_at);
     }
@@ -68,6 +68,7 @@ class Product extends Record
     public static function fromRecord(stdClass $record): Product
     {
         $id = $record->id;
+        $code = $record->code;
         $barcode = $record->barcode;
         $name = $record->name;
         $description = $record->description;
@@ -75,13 +76,23 @@ class Product extends Record
         $created_at = Carbon::createFromTimestamp($record->created_at);
         $updated_at = Carbon::createFromTimestamp($record->updated_at);
 
-        return new Product($id, $lock_version, $created_at, $updated_at, $barcode, $name, $description);
+        return new Product($id, $lock_version, $created_at, $updated_at, $code, $barcode, $name, $description);
     }
 
-    public static function asNew(string $barcode, string $name, string $description): Product
+    public static function asNew(string $code, string $barcode, string $name, string $description): Product
     {
         $current_date = new Carbon();
 
-        return new Product(-1, 1, $current_date, $current_date, $barcode, $name, $description);
+        return new Product(-1, 1, $current_date, $current_date, $code, $barcode, $name, $description);
+    }
+
+    public function getCode(): string
+    {
+        return $this->code;
+    }
+
+    public function setCode(string $code): void
+    {
+        $this->code = $code;
     }
 }

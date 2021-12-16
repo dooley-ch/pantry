@@ -28,9 +28,9 @@ use stdClass;
 class ProductExtended extends Product
 {
     public function __construct(int $id, int $lock_version, Carbon $created_at, Carbon $updated_at,
-                                string $barcode, string $name, string $description, private int $amount)
+                                string $code, string $barcode, string $name, string $description, private int $amount)
     {
-        parent::__construct($id, $lock_version, $created_at, $updated_at, $barcode, $name, $description);
+        parent::__construct($id, $lock_version, $created_at, $updated_at, $code, $barcode, $name, $description);
     }
 
     public function getAmount(): int
@@ -41,6 +41,7 @@ class ProductExtended extends Product
     public static function fromRecord(stdClass $record): ProductExtended
     {
         $id = $record->id;
+        $code = $record->code;
         $barcode = $record->barcode;
         $name = $record->name;
         $description = $record->description;
@@ -49,6 +50,6 @@ class ProductExtended extends Product
         $created_at = Carbon::createFromTimestamp($record->created_at);
         $updated_at = Carbon::createFromTimestamp($record->updated_at);
 
-        return new ProductExtended($id, $lock_version, $created_at, $updated_at, $barcode, $name, $description, $amount);
+        return new ProductExtended($id, $lock_version, $created_at, $updated_at, $code, $barcode, $name, $description, $amount);
     }
 }

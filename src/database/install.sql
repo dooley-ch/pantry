@@ -28,6 +28,7 @@ CREATE UNIQUE INDEX version_ix_version ON version(major, minor, build);
 
 CREATE TABLE product(
   id INT NOT NULL AUTO_INCREMENT,
+  code VARCHAR(60) NOT NULL,
   barcode VARCHAR(60) NOT NULL,
   name VARCHAR(300) NOT NULL,
   description TEXT,
@@ -65,6 +66,7 @@ CREATE TABLE xxx_product(
   logged_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   action CHAR(1) NOT NULL,
   record_id INT NOT NULL,
+  code VARCHAR(60),
   barcode VARCHAR(60),
   name VARCHAR(300),
   description TEXT,

@@ -61,7 +61,9 @@
 @section('content')
     <h1 class="title pt-2">Find Product by {{ $find_by_title }}</h1>
 
-    <div class="columns">
+    <img src="/img/find.png">
+
+    <div class="columns pt-3">
         <div class="column is-2">
             @include('layouts.product.menu', ['active' => $find_by_title])
         </div>
