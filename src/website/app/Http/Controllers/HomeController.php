@@ -35,9 +35,4 @@ class HomeController extends Controller
     {
         return View::make('about', ['active_page' => 'about', 'logged_in' => false]);
     }
-
-    public function setupPage(Request $request): ResponseView
-    {
-        return View::make('setup', ['active_page' => 'setup', 'logged_in' => false]);
-    }
 }

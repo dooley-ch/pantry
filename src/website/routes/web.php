@@ -21,7 +21,6 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', [HomeController::class, 'homePage'])->name('home');
-Route::get('/setup', [HomeController::class, 'setupPage'])->name('setup');
 Route::get('/usage', [HomeController::class, 'usagePage'])->name('usage');
 Route::get('/about', [HomeController::class, 'aboutPage'])->name('about');
 
