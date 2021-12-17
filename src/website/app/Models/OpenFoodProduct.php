@@ -86,14 +86,42 @@ class OpenFoodProduct
 
             $this->setNutrients($data->nutrients);
 
-            $this->setCreatedAt(Carbon::createFromTimestampUTC($data->created_at));
-            $this->setUpdatedAt(Carbon::createFromTimestampUTC($data->updated_at));
+            $this->setCreatedAt(Carbon::parse($data->created_at));
+            $this->setUpdatedAt(Carbon::parse($data->updated_at));
         } catch (Exception $e) {
             Log::error('Failed to parse Open Food Product data: ' . $e->getMessage());
             throw $e;
         }
     }
 
+    public function toArray(): array
+    {
+        $data = [];
+
+        $image_list = $this->getImages();
+        $images = [];
+
+        foreach ($image_list as $image) {
+            $image_data = array(
+                'thumb' => $image->getThumb(),
+                'medium' => $image->getMedium(),
+                'large' => $image->getLarge(),
+                'xlarge' => $image->GetXLarge(),
+                'tags' => $image->getTags()
+            );
+
+            $images [] = $image_data;
+        }
+        $data['id'] = $this->getId();
+        $data['country'] = $this->getCountry();
+        $data['barcode'] = $this->getBarcode();
+        $data['name'] = $this->getName();
+        $data['status'] = $this->getStatus();
+        $data['images'] = $images;
+        $data['updated'] = $this->getUpdatedAt();
+
+        return $data;
+    }
     public function getId(): int
     {
         return $this->id;

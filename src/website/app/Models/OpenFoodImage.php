@@ -46,7 +46,7 @@ class OpenFoodImage
         return $this->large;
     }
 
-    public function getXlarge(): string
+    public function getXLarge(): string
     {
         return $this->xlarge;
     }

@@ -135,4 +135,15 @@ class DataOperationsTest extends TestCase
         $result = $store->clearProductItems($product->getId());
         $this->assertTrue($result);
     }
+
+    /**
+     * @test
+     */
+    public function get_stock_report_is_valid()
+    {
+        $store = new Datastore();
+        $list = $store->getStockReport();
+
+        $this->assertGreaterThan(4, count($list));
+    }
 }

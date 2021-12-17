@@ -15,15 +15,29 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Http\Response;
+use App\Core\Datastore;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\View;
 use Illuminate\View\View as ResponseView;
+use Exception;
+use stdClass;
 
 class ReportsController extends Controller
 {
-    public function homePage(Request $request): ResponseView
+    public function homePage(): ResponseView
     {
-        return View::make('reports.home', ['active_page' => 'reports', 'logged_in' => false]);
+        $msg = null;
+
+        try {
+            $store = new Datastore();
+            $records = $store->getStockReport();
+        }catch (Exception $ex) {
+            Log::error('Failed to load stock summary: ' . $ex->getMessage());
+            $records = [];
+            $msg = new stdClass();
+            $msg->type = Controller::ERROR;
+            $msg->content = 'An error occurred while loading the stock summary report, see the log file for details.';
+        }
+        return View::make('reports.home', ['records' => $records, 'active_page' => 'reports', 'logged_in' => false, 'message' => $msg]);
     }
 }

@@ -1,0 +1,17 @@
+// Get product details
+GET http://localhost:8085/api/product/detail/7610809098257
+Accept: application/json
+
+###
+
+// Add product item
+PUT http://localhost:8085/api/product/add/5050083122781
+Accept: application/json
+
+###
+
+// Remove product item
+DELETE http://localhost:8085/api/product/remove/5050083122781
+Accept: application/json
+
+###

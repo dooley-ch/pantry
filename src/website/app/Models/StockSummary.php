@@ -61,8 +61,8 @@ class StockSummary extends Record
         $amount = intval($record->amount);
         $product_id = intval($record->product_id);
         $lock_version = intval($record->lock_version);
-        $created_at = Carbon::createFromTimestamp($record->created_at);
-        $updated_at = Carbon::createFromTimestamp($record->updated_at);
+        $created_at = Carbon::parse($record->created_at);
+        $updated_at = Carbon::parse($record->updated_at);
 
         return new StockSummary($id, $lock_version, $created_at, $updated_at, $amount, $product_id);
     }

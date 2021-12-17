@@ -73,11 +73,7 @@
             </a>
 
             <a class="navbar-item {{ $reports_is_active }}" href="{{ route('reports-home') }}">
-                Reports
-            </a>
-
-            <a class="navbar-item {{ $setup_is_active }}" href="{{ route('setup') }}">
-                Setup
+                Stock Report
             </a>
 
             <a class="navbar-item {{ $usage_is_active }}" href="{{ route('usage') }}">

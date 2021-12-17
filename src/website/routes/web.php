@@ -29,8 +29,8 @@ Route::post('/lookup', [ProductLookupController::class, 'lookup'])->name('lookup
 
 Route::group(['prefix' => '/api'], function () {
     Route::get('product/detail/{barcode}', [ApiController::class, 'getProductDetails'])->name('product-api-detail');
-    Route::get('product/add/{barcode}', [ApiController::class, 'addProduct'])->name('product-api-add');
-    Route::get('product/remove/{barcode}', [ApiController::class, 'removeProduct'])->name('product-api-add');
+    Route::put('product/add/{barcode}', [ApiController::class, 'addProduct'])->name('product-api-add');
+    Route::delete('product/remove/{barcode}', [ApiController::class, 'removeProduct'])->name('product-api-add');
 });
 
 Route::group(['prefix' => '/product'], function () {

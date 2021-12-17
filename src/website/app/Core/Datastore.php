@@ -23,6 +23,7 @@ use App\Models\ProductExtended;
 use App\Models\ProductFull;
 use App\Models\ProductImage;
 use App\Models\ProductImageExtended;
+use App\Models\StockReportItem;
 use App\Models\StockSummary;
 use App\Models\StockSummaryExtended;
 use App\Models\StockTransaction;
@@ -1026,7 +1027,7 @@ class Datastore
 
             DB::commit();
 
-            return $id;
+            return $product_id;
         } catch (QueryException $e) {
             DB::rollBack();
             Log::error('Failed to insert new product (' . $open_product->getBarcode() . '): ' . $e->getMessage());
@@ -1101,6 +1102,24 @@ class Datastore
         }
 
         return false;
+    }
+
+    public function getStockReport(): array
+    {
+        $records = [];
+
+        try {
+            $rows = DB::select("SELECT p.id, p.name, s.updated_at, s.amount FROM product AS p
+                                    INNER JOIN stock_summary AS s ON (p.id = s.product_id) ORDER BY p.name;");
+
+            foreach ($rows as $row) {
+                $records []= StockReportItem::fromRecord($row);
+            }
+        } catch (QueryException $e) {
+            Log::error('Failed to return stock report data' . $e->getMessage());
+        }
+
+        return $records;
     }
 
     //endregion

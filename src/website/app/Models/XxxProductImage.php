@@ -43,7 +43,7 @@ class XxxProductImage extends AuditRecord
     public static function fromRecord(stdClass $record): XxxProductImage
     {
         $id = intval($record->id);
-        $logged_at = Carbon::createFromTimestamp($record->logged_at);
+        $logged_at = Carbon::parse($record->logged_at);
         $action = $record->action;
         $record_id = intval($record->record_id);
         $product_id = intval($record->product_id);

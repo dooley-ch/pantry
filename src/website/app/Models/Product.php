@@ -73,8 +73,8 @@ class Product extends Record
         $name = $record->name;
         $description = $record->description;
         $lock_version = intval($record->lock_version);
-        $created_at = Carbon::createFromTimestamp($record->created_at);
-        $updated_at = Carbon::createFromTimestamp($record->updated_at);
+        $created_at = Carbon::parse($record->created_at);
+        $updated_at = Carbon::parse($record->updated_at);
 
         return new Product($id, $lock_version, $created_at, $updated_at, $code, $barcode, $name, $description);
     }

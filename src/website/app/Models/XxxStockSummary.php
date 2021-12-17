@@ -48,7 +48,7 @@ class XxxStockSummary extends AuditRecord
     public static function fromRecord(stdClass $record): XxxStockSummary
     {
         $id = intval($record->id);
-        $logged_at = Carbon::createFromTimestamp($record->logged_at);
+        $logged_at = Carbon::parse($record->logged_at);
         $action = $record->action;
         $record_id = intval($record->record_id);
         $amount = intval($record->amount);

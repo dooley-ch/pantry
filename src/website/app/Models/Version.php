@@ -70,7 +70,7 @@ class Version
         $minor = intval($record->minor);
         $build = intval($record->build);
         $comment = $record->comment;
-        $created_at = Carbon::createFromTimestamp($record->created_at);
+        $created_at = Carbon::parse($record->created_at);
 
         return new Version($id, $major, $minor, $build, $comment, $created_at);
     }
