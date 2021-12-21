@@ -26,10 +26,31 @@ use Illuminate\View\View as ResponseView;
 use Exception;
 use stdClass;
 
+/**
+ * Class ProductController
+ *
+ * This controller implements the product related pages:
+ * - Product home page
+ * - Product details page
+ * - Add Product operation
+ * - Remove Product operation
+ * - Delete Product transactions
+ * - Find a product by ID
+ * - Find a product by Barcode
+ * - Find a product by Name
+ *
+ * @package App\Http\Controllers
+ */
 class ProductController extends Controller
 {
     //region Find
 
+    /**
+     * This method implements the find by ID action
+     *
+     * @param Request $request The HTML request
+     * @return ResponseView|Redirector The product list based on the name or a redirect to the find page if an error occurred
+     */
     public function findByIdAction(Request $request): ResponseView|Redirector
     {
         $param = $request->input('search-value');
@@ -65,6 +86,12 @@ class ProductController extends Controller
             'action_url' => route('product-find-by-id-action' ), 'active_page' => 'product']);
     }
 
+    /**
+     * This method implements the find by barcode action
+     *
+     * @param Request $request The HTML request
+     * @return ResponseView|Redirector The product list based on the name or a redirect to the find page if an error occurred
+     */
     public function findByBarcodeAction(Request $request): ResponseView|Redirector
     {
         $param = $request->input('search-value');
@@ -98,6 +125,12 @@ class ProductController extends Controller
             'action_url' => route('product-find-by-barcode-action'), 'active_page' => 'product']);
     }
 
+    /**
+     * This method implements the find by name action
+     *
+     * @param Request $request The HTML request
+     * @return ResponseView|Redirector The product list based on the name or a redirect to the find page if an error occurred
+     */
     public function findByNameAction(Request $request): ResponseView|Redirector
     {
         $param = $request->input('search-value');
@@ -131,18 +164,33 @@ class ProductController extends Controller
             'action_url' => route('product-find-by-name-action'), 'active_page' => 'product']);
     }
 
+    /**
+     * This method returns the find by ID page
+     *
+     * @return ResponseView The find by name page
+     */
     public function findById(): ResponseView
     {
         return View::make('product.find', ['find_by_title' => 'Id', 'action_url' => route('product-find-by-id-action'),
             'active_page' => 'product']);
     }
 
+    /**
+     * This method returns the find by barcode page
+     *
+     * @return ResponseView The find by name page
+     */
     public function findByBarcode(): ResponseView
     {
         return View::make('product.find', ['find_by_title' => 'Barcode', 'action_url' => route('product-find-by-barcode-action'),
             'active_page' => 'product']);
     }
 
+    /**
+     * This method returns the find by name page
+     *
+     * @return ResponseView The find by name page
+     */
     public function findByName(): ResponseView
     {
         return View::make('product.find', ['find_by_title' => 'Name', 'action_url' => route('product-find-by-name-action'),
@@ -151,6 +199,12 @@ class ProductController extends Controller
 
     //endregion
 
+    /**
+     * This method returns the product home page
+     *
+     * @param string|null $letter The first letter of the products required in the page product's list
+     * @return ResponseView The product home page
+     */
     public function homePage(string $letter = null): ResponseView
     {
         $store = new Datastore();
@@ -173,6 +227,13 @@ class ProductController extends Controller
                 'logged_in' => false, 'message' => null]);
     }
 
+    /**
+     * This method returns the product details page
+     *
+     * @param Request $request The HTML request
+     * @param int $id The id of the product for which details are required
+     * @return ResponseView The product details page
+     */
     public function details(Request $request, int $id): ResponseView
     {
         $msg = $request->session()->get('flash_message');
@@ -203,6 +264,13 @@ class ProductController extends Controller
             'logged_in' => false, 'message' => $msg]);
     }
 
+    /**
+     * This method adds a product to the application database and displays the product page
+     *
+     * @param Request $request The HTML request
+     * @param string $barcode The barcode of the product to add
+     * @return RedirectResponse|ResponseView The product details page or redirects back to the product home page if there was an error
+     */
     public function add(Request $request, string $barcode): RedirectResponse|ResponseView
     {
         // Look up the product details
@@ -252,12 +320,19 @@ class ProductController extends Controller
             'active_page' => 'product', 'logged_in' => false, 'message' => $msg]);
     }
 
+    // TODO - Need to implement the remove method
     public function remove(Request $request, int $id): ResponseView
     {
-
         return View::make('product.home', ['products' => [], 'active_page' => 'product', 'logged_in' => false]);
     }
 
+    /**
+     * This method deletes the product and redirects back to the product home page
+     *
+     * @param Request $request The HTML request
+     * @param int $id The product id for which the transactions need to be deleted
+     * @return RedirectResponse The redirection response returning the application to the Product home page
+     */
     public function delete(Request $request, int $id): RedirectResponse
     {
         $msg = null;

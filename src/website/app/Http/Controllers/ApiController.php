@@ -19,11 +19,31 @@ use App\Core\Datastore;
 use App\Core\OpenFoodRepoLookup;
 use Illuminate\Http\JsonResponse;
 use Exception;
-use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Log;
 
+/**
+ * Class ApiController
+ *
+ * This controller implements the REST functionality for the application.  The controller provides three
+ * methods:
+ * - getProductDetails
+ * - addProduct
+ * - removeProduct
+ *
+ * @package App\Http\Controllers
+ */
 class ApiController extends Controller
 {
+    /**
+     * This method provides product details from the Open Food Repo website (OFR) using the product barcode.
+     * The method returns messages with three status codes:
+     * - 200, with the product details
+     * - 404, if the product can't be found on the OFR website
+     * - 500, An unexpected error occurred
+     *
+     * @param string $barcode The barcode of the product for which details are required
+     * @return JsonResponse
+     */
     public function getProductDetails(string $barcode): JsonResponse
     {
         $content = [];
@@ -49,6 +69,15 @@ class ApiController extends Controller
         return new JsonResponse($content, $status);
     }
 
+    /**
+     * This method increases the quantity of a product on the application database by one based on the barcode provided.
+     * The method returns messages with two status codes:
+     * - 200, if the operation was completed successfully
+     * - 500, An unexpected error occurred
+     *
+     * @param string $barcode The barcode of the product for which details are required
+     * @return JsonResponse
+     */
     public function addProduct(string $barcode): JsonResponse
     {
         $content = [];
@@ -101,6 +130,15 @@ class ApiController extends Controller
         return new JsonResponse($content, $status);
     }
 
+    /**
+     * This method decreases the quantity of a product on the application database by one based on the barcode provided.
+     * The method returns messages with two status codes:
+     * - 200, if the operation was completed successfully
+     * - 500, An unexpected error occurred
+     *
+     * @param string $barcode The barcode of the product for which details are required
+     * @return JsonResponse
+     */
     public function removeProduct(string $barcode): JsonResponse
     {
         $content = [];

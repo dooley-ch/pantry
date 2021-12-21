@@ -19,19 +19,44 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\View;
 use Illuminate\View\View as ResponseView;
 
+/**
+ * Class HomeController
+ *
+ * This controller implements the follow pages
+ * - Home page
+ * - Usage page
+ * - About page
+ *
+ * @package App\Http\Controllers
+ */
 class HomeController extends Controller
 {
-    public function homePage(Request $request): ResponseView
+    /**
+     * This method returns the home page of application
+     *
+     * @return ResponseView
+     */
+    public function homePage(): ResponseView
     {
         return View::make('home', ['active_page' => 'home', 'logged_in' => false]);
     }
 
-    public function usagePage(Request $request): ResponseView
+    /**
+     * This method returns the usage page for the application
+     *
+     * @return ResponseView
+     */
+    public function usagePage(): ResponseView
     {
         return View::make('usage', ['active_page' => 'usage', 'logged_in' => false]);
     }
 
-    public function aboutPage(Request $request): ResponseView
+    /**
+     * This method returns the about page for the application
+     *
+     * @return ResponseView
+     */
+    public function aboutPage(): ResponseView
     {
         return View::make('about', ['active_page' => 'about', 'logged_in' => false]);
     }

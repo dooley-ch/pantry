@@ -22,8 +22,20 @@ use Illuminate\View\View as ResponseView;
 use Exception;
 use stdClass;
 
+/**
+ * Class ReportsController
+ *
+ * This controller implements the reporting functionality of the application
+ *
+ * @package App\Http\Controllers
+ */
 class ReportsController extends Controller
 {
+    /**
+     * The method implements the reports home page
+     *
+     * @return ResponseView The reports home page
+     */
     public function homePage(): ResponseView
     {
         $msg = null;

@@ -18,8 +18,6 @@ namespace App\Http\Controllers;
 use App\Core\Datastore;
 use App\Core\OpenFoodRepoLookup;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
-use Illuminate\Routing\Redirector;
 use Illuminate\Support\Facades\View;
 use Illuminate\View\View as ResponseView;
 use Illuminate\Http\RedirectResponse;
@@ -27,8 +25,24 @@ use Illuminate\Support\Facades\Log;
 
 use Exception;
 
+/**
+ * Class ProductLookupController
+ *
+ * This controller provides the Open Food Repo lookup functions for the
+ * application.  The controller provides two functions:
+ * - The search home page
+ * - The lookup function
+ *
+ * @package App\Http\Controllers
+ */
 class ProductLookupController extends Controller
 {
+    /**
+     * This method displays the product lookup search page
+     *
+     * @param Request $request The HTML request
+     * @return ResponseView The lookup search page
+     */
     public function homePage(Request $request): ResponseView
     {
         $msg = $request->session()->get('flash_message');
@@ -42,7 +56,13 @@ class ProductLookupController extends Controller
         return View::make('product_lookup', ['product' => null, 'active_page' => 'lookup', 'logged_in' => false, 'message' => $msg]);
     }
 
-    public function lookup(Request $request): RedirectResponse|Redirector|Response|ResponseView
+    /**
+     * This method performs the product lookup by barcode or code and displays the results page
+     *
+     * @param Request $request The HTML request
+     * @return RedirectResponse|ResponseView The product details or the lookup search page if none found
+     */
+    public function lookup(Request $request): RedirectResponse|ResponseView
     {
         $lookup = new OpenFoodRepoLookup();
         $request_data = $request->all('search-type', 'search-value');

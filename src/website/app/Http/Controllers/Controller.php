@@ -10,11 +10,16 @@ use Illuminate\Routing\Controller as BaseController;
 /**
  * Class Controller
  *
- * This controller passes messages between response methods using the following message codes:
+ * This is the base class for all controllers in the application.  It provides the constant
+ * definitions for flash messages displayed on the application pages.
+ *
+ * The following message constants are defined:
  *    INFO = 0
  *    SUCCESS = 1
  *    WARNING = 2
  *    ERROR = 3
+ *
+ * @package App\Http\Controllers
  */
 class Controller extends BaseController
 {

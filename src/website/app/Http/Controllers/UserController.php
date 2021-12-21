@@ -15,14 +15,24 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Illuminate\Support\Facades\View;
 use Illuminate\View\View as ResponseView;
 
+/**
+ * Class UserController
+ *
+ * This controller implements the User functionality for the application
+ *
+ * @package App\Http\Controllers
+ */
 class UserController extends Controller
 {
-    public function homePage(Request $request): ResponseView
+    /**
+     * This method displays the user home page
+     *
+     * @return ResponseView
+     */
+    public function homePage(): ResponseView
     {
         return View::make('user.home', ['active_page' => 'user', 'logged_in' => false]);
     }
