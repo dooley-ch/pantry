@@ -54,7 +54,7 @@ class Datastore
      * @param int $id The id of the image record being requested
      * @return Image|null The image record if found, otherwise null
      */
-    public function getImage(int $id): ?Image
+    public function getImage(int $id): Image|null
     {
         $record = DB::table('image')->find($id);
 
@@ -69,7 +69,7 @@ class Datastore
      * This method returns the images for a given product image based on the product image id.
      *
      * @param int $product_image_id The product
-     * @return array
+     * @return array A collection of images for the given product image id
      */
     public function getImages(int $product_image_id): array
     {
@@ -91,7 +91,7 @@ class Datastore
      * @return Image|null The image record, populated with the new database values for id, lock_version etc.
      *                    or null if the record can't be inserted
      */
-    public function insertImage(Image $image): ?Image
+    public function insertImage(Image $image): Image|null
     {
         DB::beginTransaction();
 
@@ -119,7 +119,7 @@ class Datastore
      * @param Image $image The image to be updated
      * @return Image|null The updated image containing new values for the lock_version and updated_at fields or null if the update fails.
      */
-    public function updateImage(Image $image): ?Image
+    public function updateImage(Image $image): Image|null
     {
         DB::beginTransaction();
 
@@ -212,7 +212,7 @@ class Datastore
      * @param int $id The id of the record to return
      * @return Product|null The product record if found, otherwise null
      */
-    public function getProduct(int $id): ?Product
+    public function getProduct(int $id): Product|null
     {
         $record = DB::table('product')->find($id);
 
@@ -229,7 +229,7 @@ class Datastore
      * @param string $barcode The barcode of the record to return
      * @return Product|null The product record if found, otherwise null
      */
-    public function getProductByBarcode(string $barcode): ?Product
+    public function getProductByBarcode(string $barcode): Product|null
     {
         $records = DB::table('product')->where('barcode', $barcode)->get();
 
@@ -240,6 +240,12 @@ class Datastore
         return null;
     }
 
+    /**
+     * This method finds products by the given id
+     *
+     * @param int $id The id to search with
+     * @return array The collection of product found in the search
+     */
     public function findProductsById(int $id): array
     {
         $records = [];
@@ -259,6 +265,12 @@ class Datastore
         return $records;
     }
 
+    /**
+     * This method finds products by barcode
+     *
+     * @param string $barcode The barcode to search with
+     * @return array The collection of product found in the search
+     */
     public function findProductsByBarcode(string $barcode): array
     {
         $records = [];
@@ -278,6 +290,12 @@ class Datastore
         return $records;
     }
 
+    /**
+     * This method finds products by name
+     *
+     * @param string $name The name to search with
+     * @return array The collection of product found in the search
+     */
     public function findProductsByName(string $name): array
     {
         $records = [];
@@ -298,6 +316,12 @@ class Datastore
         return $records;
     }
 
+    /**
+     * This method finds products beginning with the given letter
+     *
+     * @param string $letter The letter to search with
+     * @return array The collection of product found in the search
+     */
     public function getProductExtended(string $letter): array
     {
         $records = [];
@@ -318,6 +342,11 @@ class Datastore
         return $records;
     }
 
+    /**
+     * This gets a unique list of product first letter of the products in the database
+     *
+     * @return array
+     */
     public function getProductLetters(): array
     {
         $records = [];
@@ -342,7 +371,7 @@ class Datastore
      * @return Product|null The product record, populated with the new database values for id, lock_version etc.
      *                      or null if the record can't be inserted
      */
-    public function insertProduct(Product $product): ?Product
+    public function insertProduct(Product $product): Product|null
     {
         DB::beginTransaction();
 
@@ -371,7 +400,7 @@ class Datastore
      * @return Product|null The product record, populated with the new database values for lock_version and updated_at etc.
      *                      or null if the record can't be updated
      */
-    public function updateProduct(Product $product): ?Product
+    public function updateProduct(Product $product): Product|null
     {
         DB::beginTransaction();
 
@@ -500,7 +529,7 @@ class Datastore
      * @param int $id The id of the product image record being requested
      * @return ProductImage|null The product image record if found, otherwise null
      */
-    public function getProductImage(int $id): ?ProductImage
+    public function getProductImage(int $id): ProductImage|null
     {
         $record = DB::table('product_image')->find($id);
 
@@ -537,7 +566,7 @@ class Datastore
      * @return ProductImage|null The product image record, populated with the new database values for id, lock_version etc.
      *                           or null if the record can't be inserted
      */
-    public function insertProductImage(ProductImage $product_image): ?ProductImage
+    public function insertProductImage(ProductImage $product_image): ProductImage|null
     {
         DB::beginTransaction();
 
@@ -565,7 +594,7 @@ class Datastore
      * @return ProductImage|null The product image record, populated with the new database values for lock_version, updated_at etc.
      *                           or null if the record can't be inserted
      */
-    public function updateProductImage(ProductImage $product_image): ?ProductImage
+    public function updateProductImage(ProductImage $product_image): ProductImage|null
     {
         DB::beginTransaction();
 
@@ -656,7 +685,7 @@ class Datastore
      * @param int $id The id of the stock summary required
      * @return StockSummary|null The stock summary record or null if no record is required
      */
-    public function getStockSummary(int $id): ?StockSummary
+    public function getStockSummary(int $id): StockSummary|null
     {
         $record = DB::table('stock_summary')->find($id);
 
@@ -673,7 +702,7 @@ class Datastore
      * @param int $product_id The product id for which the summary record is required
      * @return StockSummary|null The stock summary record or null if no record is required
      */
-    public function getStockSummaryByProduct(int $product_id): ?StockSummary
+    public function getStockSummaryByProduct(int $product_id): StockSummary|null
     {
         $record = DB::table('stock_summary')->where('product_id', $product_id)->first();
 
@@ -686,11 +715,12 @@ class Datastore
 
     /**
      * This method inserts a stock summary record into the database
+     *
      * @param StockSummary $summary The stock summary record to insert
      * @return StockSummary|null The stock summary record, populated with the new database values for id, lock_version etc.
      *                           or null if the record can't be inserted
      */
-    public function insertStockSummary(StockSummary $summary): ?StockSummary
+    public function insertStockSummary(StockSummary $summary): StockSummary|null
     {
         DB::beginTransaction();
 
@@ -719,7 +749,7 @@ class Datastore
      * @return StockSummary|null The stock summary record, populated with the new database values for lock_version, updated_at etc.
      *                           or null if the record can't be updated
      */
-    public function updateStockSummary(StockSummary $summary): ?StockSummary
+    public function updateStockSummary(StockSummary $summary): StockSummary|null
     {
         DB::beginTransaction();
 
@@ -810,7 +840,7 @@ class Datastore
      * @param int $id The id of the stock transaction to return
      * @return StockTransaction|null The stock transaction record or null if not found
      */
-    public function getStockTransaction(int $id): ?StockTransaction
+    public function getStockTransaction(int $id): StockTransaction|null
     {
         $record = DB::table('stock_transaction')->find($id);
 
@@ -847,7 +877,7 @@ class Datastore
      * @return StockTransaction|null The stock transaction record, populated with the new database values for id, lock_version etc.
      *                               or null if the record can't be inserted
      */
-    public function insertStockTransaction(StockTransaction $transaction): ?StockTransaction
+    public function insertStockTransaction(StockTransaction $transaction): StockTransaction|null
     {
         try {
             $id = DB::table('stock_transaction')->insertGetId(
@@ -870,7 +900,7 @@ class Datastore
      * @return StockTransaction|null The stock transaction record, populated with the new database values for lock_version, updated_at etc.
      *                               or null if the record can't be inserted
      */
-    public function updateStockTransaction(StockTransaction $transaction): ?StockTransaction
+    public function updateStockTransaction(StockTransaction $transaction): StockTransaction|null
     {
         try {
             $affected = DB::table('stock_transaction')->where('id', $transaction->getId())->where('lock_version',
@@ -924,7 +954,7 @@ class Datastore
      *
      * @return Version|null The current database version number or null if none is available
      */
-    public function getVersion(): ?Version
+    public function getVersion(): Version|null
     {
         $record = DB::table('version')->select('id', 'major', 'minor', 'build', 'comment', 'created_at')->first();
 
@@ -939,7 +969,13 @@ class Datastore
 
     //region Operations
 
-    public function getFullProduct($id): ?ProductFull
+    /**
+     * This method returns the complete details of a product stored in the database based on the supplied id
+     *
+     * @param int $id The id of the product for which the details are required
+     * @return ProductFull|null The product details if found, otherwise null
+     */
+    public function getFullProduct(int $id): ProductFull|null
     {
         // Product
         $product = $this->getProduct($id);
@@ -979,6 +1015,12 @@ class Datastore
         return $product_full;
     }
 
+    /**
+     * This method adds a new product to the application database
+     *
+     * @param OpenFoodProduct $open_product Details of the product to add to the database
+     * @return int|null The id of the newly added product or null if the method fails
+     */
     public function addProduct(OpenFoodProduct $open_product): int|null
     {
         DB::beginTransaction();
@@ -1036,6 +1078,13 @@ class Datastore
         return null;
     }
 
+    /**
+     * This method adds or removes an item from the given product depending on the operation indicated
+     *
+     * @param int $product_id The id of the product to update
+     * @param string $operation If 'A' then the quantity in stock is increased, if 'R' the quantity is decreased
+     * @return bool True if the operation is successful otherwise False
+     */
     public function alterProductItems(int $product_id, string $operation): bool
     {
         $summary = $this->getStockSummaryByProduct($product_id);
@@ -1074,6 +1123,14 @@ class Datastore
         return false;
     }
 
+    /**
+     * This method resets the product details for the given product id, in doing so it:
+     * - Deletes the transactions
+     * - Sets the summary record to zero
+     *
+     * @param int $product_id The id of the product to reset
+     * @return bool - True if successful otherwise false
+     */
     public function clearProductItems(int $product_id): bool
     {
         $summary = $this->getStockSummaryByProduct($product_id);
@@ -1104,6 +1161,11 @@ class Datastore
         return false;
     }
 
+    /**
+     * This method returns the data needed to generate the stock report
+     *
+     * @return array Data needed to be used in the stock report
+     */
     public function getStockReport(): array
     {
         $records = [];
