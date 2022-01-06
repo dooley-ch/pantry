@@ -17,7 +17,7 @@ declare(strict_types=1);
 namespace Tests\data;
 
 use App\Core\Datastore;
-use Tests\TestCase;;
+use Tests\TestCase;
 
 class DatastoreSelectTest extends TestCase
 {
@@ -115,7 +115,7 @@ class DatastoreSelectTest extends TestCase
         $store = new Datastore();
         $list = $store->getProductLetters();
 
-        $this->assertGreaterThanOrEqual(2, count($list));
+        $this->assertGreaterThanOrEqual(1, count($list));
     }
 
     //endregion

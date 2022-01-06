@@ -1079,11 +1079,10 @@ class Datastore
     }
 
     /**
-     * This method adds or removes an item from the given product depending on the operation indicated
-     *
-     * @param int $product_id The id of the product to update
-     * @param string $operation If 'A' then the quantity in stock is increased, if 'R' the quantity is decreased
-     * @return bool True if the operation is successful otherwise False
+     * This method adds or removes an item from the given product
+     * @param int $product_id
+     * @param string $operation
+     * @return bool
      */
     public function alterProductItems(int $product_id, string $operation): bool
     {
@@ -1164,7 +1163,7 @@ class Datastore
     /**
      * This method returns the data needed to generate the stock report
      *
-     * @return array Data needed to be used in the stock report
+     * @return array Data needed used in the stock report
      */
     public function getStockReport(): array
     {
