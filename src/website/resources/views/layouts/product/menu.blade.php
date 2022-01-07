@@ -2,6 +2,7 @@
     if (!isset($active))
         $active = '';
 
+    $menu_all = '';
     $menu_by_name = '';
     $menu_by_barcode = '';
     $menu_by_id = '';
@@ -14,6 +15,9 @@
 
     if ($active === 'Name')
         $menu_by_name = 'is-active';
+
+    if ($active === '')
+        $menu_all = 'is-active';
 @endphp
 
 <aside class="menu box">
@@ -21,6 +25,7 @@
         Find Product
     </p>
     <ul class="menu-list">
+        <li><a class="{{ $menu_all }}" href="{{ route('product-home') }}">All</a></li>
         <li><a class="{{ $menu_by_name }}" href="{{ route('product-find-by-name') }}">By Name</a></li>
         <li><a class="{{ $menu_by_barcode }}" href="{{ route('product-find-by-barcode') }}">By Barcode</a></li>
         <li><a class="{{ $menu_by_id }}" href="{{ route('product-find-by-id') }}">By Id</a></li>

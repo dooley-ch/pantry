@@ -40,8 +40,8 @@
         </div>
         <div class="column">
             @if ($flash_show)
-                <div class="notification {{ $flash_class }}">
-                    <button class="delete"></button>
+                <div id="flash-message" class="notification {{ $flash_class }}">
+                    <button id="flash-message-button" class="delete"></button>
                     {{ $flash_content }}
                 </div>
             @endif
