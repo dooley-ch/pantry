@@ -5,7 +5,7 @@
 @section('content')
     <div class="columns pt-2">
         <div class="column is-narrow">
-            <img src="/img/usage.png">
+            <img class="is-hidden-mobile" src="/img/usage.png">
         </div>
         <div class="column">
             <h1 class="title">Site Usage</h1>
